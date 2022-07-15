@@ -7,28 +7,28 @@ function loadSkyboxTexture() {
     const faceInfos = [
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-            url: 'resources/images/matrix.png',
-        },
-        {
+            url: 'resources/images/immagine.png',
+          },
+          {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-            url: 'resources/images/matrix.png',
-        },
-        {
+            url: 'resources/images/immagine.png',
+          },
+          {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-            url: 'resources/images/matrix.png',
-        },
-        {
+            url: 'resources/images/immagine.png',
+          },
+          {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-            url: 'resources/images/matrix.png',
-        },
-        {
+            url: 'resources/images/immagine.png',
+          },
+          {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-            url: 'resources/images/matrix.png',
-        },
-        {
+            url: 'resources/images/immagine.png',
+          },
+          {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            url: 'resources/images/matrix.png',
-        },
+            url: 'resources/images/immagine.png',
+          },
     ]
 
     faceInfos.forEach((faceInfo) => {

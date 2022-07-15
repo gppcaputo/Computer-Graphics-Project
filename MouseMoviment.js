@@ -29,7 +29,7 @@ function initMouse() {
     velSterzo = 3.2;         // A
     velRitornoSterzo = 0.84; // B, sterzo massimo = A*B / (1-B)
 
-    accMax = 0.001;
+    accMax = 0.02;
 
     // attriti: percentuale di velocita' che viene mantenuta
     // 1 = no attrito

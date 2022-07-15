@@ -12,7 +12,6 @@ let bufferInfo_rotella
 let texture_sphere
 let texture_cube
 let texture_skybox
-let texture_spaceman
 let texture_mouse
 let texture_floor
 let texture_rotella
@@ -23,24 +22,24 @@ function test(gl) {
     loadCube()
     loadMouse()
     loadRotella()
-    drawFloor()
+    loadFloor()
 
     /*------------------------------------------------------------------------------------------------------------------------------*/
     //definisco il buffer per lo skybox
-    /* const skybox_array = createXYQuadVertices.apply(null, Array.prototype.slice.call(arguments, 1))
+     const skybox_array = createXYQuadVertices.apply(null, Array.prototype.slice.call(arguments, 1))
      texture_skybox = loadSkyboxTexture()
      bufferInfo_skybox = webglUtils.createBufferInfoFromArrays(gl, skybox_array)
      console.log("bufferInfo_skybox", bufferInfo_skybox)
 
 
-    */
+    
 
 }
 
-function drawFloor()
+function loadFloor()
 {
     {
-		const S = 10; 		
+		const S = 40; 		
 		const H = 0; 
 
 		const textureCoords = [ 0,0, 1,0, 0,1, 1,1,];
@@ -54,7 +53,7 @@ function drawFloor()
 		};
 
 		bufferInfo_floor = webglUtils.createBufferInfoFromArrays(gl, arrays_floor);
-        texture_floor = loadTextureFromImg("resources/images/matrix.jpg")
+        texture_floor = loadTextureFromImg("resources/images/matrix.png")
         console.log("bufferInfo_florr", bufferInfo_floor)
 	}
 }
@@ -112,7 +111,7 @@ function loadMouse() {
     }
     bufferInfo_mouse = webglUtils.createBufferInfoFromArrays(gl, mouse_array)
     console.log("bufferInfo_mouse", bufferInfo_mouse)
-    texture_mouse = loadTextureFromImg("resources/images/grey_g.jpg")
+    texture_mouse = loadTextureFromImg("resources/images/black.jpg")
 }
 
 
