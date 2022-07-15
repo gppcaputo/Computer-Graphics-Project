@@ -1,13 +1,34 @@
 "use strict";
 
-let cameraTarget = [0, 0, 0] //eye location of the camera dove guardiamo
-let cameraPosition = [10, 0, 4] // center where the camera is pointed ovvero D
-let up = [0, 1, 0] //which way is up
-const zNear = 0.1
-const zFar = 100
-const fieldOfViewRadians = degToRad(60);
+let cameraTarget = [0, 0, 0]     //eye location of the camera dove guardiamo
+let cameraPosition = [10, 0, 4]    // center where the camera is pointed ovvero D
+let up = [0, 1, 0]  //se cambia up, ruota l'intero SDR, quindi cambiano gli assi
+const zNear = 0.1   // faccia più piccola del frustum znear
+const zFar = 100    // faccia più grande del frustum znear
+const fieldOfViewRadians = degToRad(60);    //fov, aumentando questo, aumento l'ampiezza della visuale (tipo grandangolo)
 const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var cameraLibera = false; // drag del mouse
+
+
+const THETA= degToRad(86);
+const PHI=degToRad(23);	
+const x_light= 100, 
+y_light= 400,
+z_light= 10, 
+x_targetlight= 0,	
+y_targetlight= 0,	
+z_targetlight= 0, 				
+width_projLight= 30,
+height_projLight= 30,
+fovLight = 500,
+lightIntensity= 2.5,
+shadowIntensity=0.5;
+
+//matri globali
+var lightWorldMatrix;
+var lightProjectionMatrix;
+var projectionMatrix;
+var cameraMatrix;
 
 async function update() {
     // compiles and links the shaders, looks up attribute and uniform locations
@@ -16,6 +37,9 @@ async function update() {
     //skybox program
     const skyboxProgramInfo = webglUtils.createProgramInfo(gl, [skyVertShader, skyFragShader])
 
+    //sun program
+    const sunProgramInfo = webglUtils.createProgramInfo(gl, [sunVertShader, sunFragShader])
+
     //draw geometry?
     test(gl)
 
@@ -23,6 +47,21 @@ async function update() {
 
 
     function render(time) {
+
+        // first draw from the POV of the light
+    lightWorldMatrix = m4.lookAt(
+        [x_light, y_light, z_light],          			// position
+        [x_targetlight, y_targetlight, z_targetlight], 	// target
+        up,                                				// up
+    );
+
+    lightProjectionMatrix = m4.perspective(
+            degToRad(fovLight),
+            width_projLight / height_projLight,
+            1,  	// near: top of the frustum
+            700);   // far: bottom of the frustum
+
+
         time *= 0.001;  // convert to seconds
 
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);

@@ -65,3 +65,73 @@ const skyFragShader = `
         gl_FragColor = textureCube(u_skybox, normalize(t.xyz/t.w));
     }
     `;
+
+  const sunVertShader = `
+		attribute vec4 a_position;
+		attribute vec2 a_texcoord;
+		attribute vec3 a_normal;
+
+		uniform mat4 u_projection;
+		uniform mat4 u_view;
+		uniform mat4 u_world;
+		uniform mat4 u_textureMatrix;
+
+		varying vec2 v_texcoord;
+		varying vec4 v_projectedTexcoord;
+		varying vec3 v_normal;
+
+		void main() {
+		  // Multiply the position by the matrix.
+		  vec4 worldPosition = u_world * a_position;
+
+		  gl_Position = u_projection * u_view * worldPosition;
+
+		  // Pass the texture coord to the fragment shader.
+		  v_texcoord = a_texcoord;
+
+		  v_projectedTexcoord = u_textureMatrix * worldPosition;
+
+		  // orient the normals and pass to the fragment shader
+		  v_normal = mat3(u_world) * a_normal;}`;
+		
+		const sunFragShader = `
+			precision mediump float;
+
+			// Passed in from the vertex shader.
+			varying vec2 v_texcoord;
+			varying vec4 v_projectedTexcoord;
+			varying vec3 v_normal;
+
+			uniform vec4 u_colorMult;
+			uniform sampler2D u_texture;
+			uniform sampler2D u_projectedTexture;
+			uniform float u_bias;
+			uniform float u_lightIntensity;
+			uniform float u_shadowIntensity;
+			uniform vec3 u_reverseLightDirection;
+
+			void main() {
+			  // because v_normal is a varying it's interpolated
+			  // so it will not be a unit vector. Normalizing it
+			  // will make it a unit vector again
+			  vec3 normal = normalize(v_normal);
+
+			  float light = dot(normal, u_reverseLightDirection);
+
+			  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+			  float currentDepth = projectedTexcoord.z + u_bias;
+
+			  bool inRange =
+				  projectedTexcoord.x >= 0.0 &&
+				  projectedTexcoord.x <= 1.0 &&
+				  projectedTexcoord.y >= 0.0 &&
+				  projectedTexcoord.y <= 1.0;
+
+			  // the 'r' channel has the depth values
+			  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
+			  float shadowLight = (inRange && projectedDepth <= currentDepth) ? u_shadowIntensity : u_lightIntensity; //2.5;
+
+			  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+			  gl_FragColor = vec4(texColor.rgb * light * shadowLight,	 texColor.a);
+			}`;
+		
