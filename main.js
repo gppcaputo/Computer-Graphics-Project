@@ -191,7 +191,15 @@ function drawFloor(meshProgramInfo){
 function drawSkybox(gl, skyboxProgramInfo, view, projection) {
     gl.depthFunc(gl.LEQUAL) //non so perchè è necessario per lo skybox
 
-    let viewDirectionProjectionMatrix = m4.multiply(projection, view)
+    const viewMatrix = m4.copy(view);
+
+    // remove translations
+    viewMatrix[12] = 0;
+    viewMatrix[13] = 0;
+    viewMatrix[14] = 0;
+
+
+    let viewDirectionProjectionMatrix = m4.multiply(projection, viewMatrix)
     let viewDirectionProjectionInverse = m4.inverse(viewDirectionProjectionMatrix)
     gl.useProgram(skyboxProgramInfo.program);
     webglUtils.setBuffersAndAttributes(gl, skyboxProgramInfo, bufferInfo_skybox)

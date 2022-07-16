@@ -23,17 +23,8 @@ function test(gl) {
     loadMouse()
     loadRotella()
     loadFloor()
-
-    /*------------------------------------------------------------------------------------------------------------------------------*/
-    //definisco il buffer per lo skybox
-     const skybox_array = createXYQuadVertices.apply(null, Array.prototype.slice.call(arguments, 1))
-     texture_skybox = loadSkyboxTexture()
-     bufferInfo_skybox = webglUtils.createBufferInfoFromArrays(gl, skybox_array)
-     console.log("bufferInfo_skybox", bufferInfo_skybox)
-
-
+    loadSkyBox()
     
-
 }
 
 function loadFloor()
@@ -114,6 +105,25 @@ function loadMouse() {
     texture_mouse = loadTextureFromImg("resources/images/black.jpg")
 }
 
+
+function loadSkyBox(){
+    texture_skybox = loadSkyboxTexture()
+    bufferInfo_skybox = webglUtils.createBufferInfoFromArrays(gl, {
+       position: {
+           // prettier-ignore
+           data: new Float32Array([
+               -1, -1, // bottom-left triangle
+                1, -1,
+               -1,  1,
+               -1,  1, // top-right triangle
+                1, -1,
+                1,  1,
+           ]),
+           numComponents: 2,
+       },
+   });
+    console.log("bufferInfo_skybox", bufferInfo_skybox)
+}
 
 function loadObjFromUrl(url) {
     let xhttp = new XMLHttpRequest()

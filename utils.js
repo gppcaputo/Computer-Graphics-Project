@@ -4,7 +4,7 @@ function loadSkyboxTexture() {
     const texture = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture)
 
-    const faceInfos = [
+    /*const faceInfos = [
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
             url: 'resources/images/immagine.png',
@@ -29,7 +29,16 @@ function loadSkyboxTexture() {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
             url: 'resources/images/immagine.png',
           },
-    ]
+    ]*/
+
+
+    const faceInfos = [{target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, url: 'resources/skybox/pos-x.jpg',},
+					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, url: 'resources/skybox/neg-x.jpg',},
+					{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, url: 'resources/skybox/pos-y.jpg',},
+					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, url: 'resources/skybox/neg-y.jpg',},
+					{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, url: 'resources/skybox/pos-z.jpg',},
+					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, url: 'resources/skybox/neg-z.jpg',},
+					];
 
     faceInfos.forEach((faceInfo) => {
         const {target, url} = faceInfo;
@@ -37,8 +46,8 @@ function loadSkyboxTexture() {
         // Upload the canvas to the cubemap face.
         const level = 0;
         const internalFormat = gl.RGBA;
-        const width = 512;
-        const height = 512;
+        const width = 1024;
+        const height = 1024;
         const format = gl.RGBA;
         const type = gl.UNSIGNED_BYTE;
 
