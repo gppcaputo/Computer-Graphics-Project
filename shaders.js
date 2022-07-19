@@ -1,4 +1,24 @@
-// World shaders ??
+const colorVertShader= `
+			attribute vec4 a_position;
+
+			uniform mat4 u_projection;
+			uniform mat4 u_view;
+			uniform mat4 u_world;
+
+			void main() {
+			  // Multiply the position by the matrices.
+			  gl_Position = u_projection * u_view * u_world * a_position;
+			}`;
+const colorFragShader= `
+			precision mediump float;
+
+			uniform vec4 u_color;
+			void main() {
+			  gl_FragColor = u_color;
+			}`;
+
+
+
 const vertShader = `
   attribute vec4 a_position;
   attribute vec2 a_texcoord;
@@ -39,7 +59,7 @@ const fragShader = `
   `;
 
 
-//SKYBOX SHADERS - PROVA
+//SKYBOX SHADERS 
 const skyVertShader = `
     attribute vec4 a_position;
     
@@ -95,43 +115,44 @@ const skyFragShader = `
 		  v_normal = mat3(u_world) * a_normal;}`;
 		
 		const sunFragShader = `
-			precision mediump float;
+		precision mediump float;
 
-			// Passed in from the vertex shader.
-			varying vec2 v_texcoord;
-			varying vec4 v_projectedTexcoord;
-			varying vec3 v_normal;
+		// Passed in from the vertex shader.
+		varying vec2 v_texcoord;
+		varying vec4 v_projectedTexcoord;
+		varying vec3 v_normal;
 
-			uniform vec4 u_colorMult;
-			uniform sampler2D u_texture;
-			uniform sampler2D u_projectedTexture;
-			uniform float u_bias;
-			uniform float u_lightIntensity;
-			uniform float u_shadowIntensity;
-			uniform vec3 u_reverseLightDirection;
+		uniform vec4 u_colorMult;
+		uniform sampler2D u_texture;
+		uniform sampler2D u_projectedTexture;
+		uniform float u_bias;
+		uniform float u_lightIntensity;
+		uniform float u_shadowIntensity;
+		uniform vec3 u_reverseLightDirection;
 
-			void main() {
-			  // because v_normal is a varying it's interpolated
-			  // so it will not be a unit vector. Normalizing it
-			  // will make it a unit vector again
-			  vec3 normal = normalize(v_normal);
+		void main() {
+		  // because v_normal is a varying it's interpolated
+		  // so it will not be a unit vector. Normalizing it
+		  // will make it a unit vector again
+		  vec3 normal = normalize(v_normal);
 
-			  float light = dot(normal, u_reverseLightDirection);
+		  float light = dot(normal, u_reverseLightDirection);
 
-			  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
-			  float currentDepth = projectedTexcoord.z + u_bias;
+		  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+		  float currentDepth = projectedTexcoord.z + u_bias;
 
-			  bool inRange =
-				  projectedTexcoord.x >= 0.0 &&
-				  projectedTexcoord.x <= 1.0 &&
-				  projectedTexcoord.y >= 0.0 &&
-				  projectedTexcoord.y <= 1.0;
+		  bool inRange =
+			  projectedTexcoord.x >= 0.0 &&
+			  projectedTexcoord.x <= 1.0 &&
+			  projectedTexcoord.y >= 0.0 &&
+			  projectedTexcoord.y <= 1.0;
 
-			  // the 'r' channel has the depth values
-			  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
-			  float shadowLight = (inRange && projectedDepth <= currentDepth) ? u_shadowIntensity : u_lightIntensity; //2.5;
+		  // the 'r' channel has the depth values
+		  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
+		  float shadowLight = (inRange && projectedDepth <= currentDepth) ? u_shadowIntensity : u_lightIntensity; //2.5;
 
-			  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
-			  gl_FragColor = vec4(texColor.rgb * light * shadowLight,	 texColor.a);
+		  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+		  gl_FragColor = vec4(texColor.rgb * light * shadowLight,	 texColor.a);
+
 			}`;
 		

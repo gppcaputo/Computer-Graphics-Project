@@ -1,10 +1,10 @@
-// carrera.js
-// Implementazione dei metodi che permettono il movimento della carrera.
 
-// STATO DELLA MACCHINA
+// Implementazione dei metodi che permettono il movimento del mouse.
+
+// STATO Mouse
 // (DoStep fa evolvere queste variabili nel tempo)
 var posX, posY, posZ, facing; // posizione e orientamento
-var mozzoA, mozzoP, sterzo; // stato interno
+var sterzo; 
 var vx, vy, vz; // velocita' attuale
 
 // queste di solito rimangono costanti
@@ -12,47 +12,40 @@ var velSterzo, velRitornoSterzo, accMax, attrito,
     raggioRuotaA, raggioRuotaP, grip,
     attritoX, attritoY, attritoZ; // attriti
 var key;
-var incVelocitaLancio;
 
 
-/*=================== CARRERA INIT: Inizializziamo le variabili utili alla fisica e al movimento della carrera ===================*/
+//Inizializziamo le variabili utili  al movimento del mouse
 function initMouse() {
     // inizializzo lo stato della macchina
     posX = posY = posZ = facing = 0; // posizione e orientamento
-    mozzoA = mozzoP = sterzo = 0;   // stato
+    sterzo = 0;   // stato
     vx = vy = vz = 0;      // velocita' attuale
-    // inizializzo la struttura di controllo
+    // inizializzo i controlli
     key = [false, false, false, false];
-    lancioCarrera = false;
-    incVelocitaLancio = false;
+   
 
     velSterzo = 3.2;         // A
     velRitornoSterzo = 0.84; // B, sterzo massimo = A*B / (1-B)
 
-    accMax = 0.02;
+    accMax = 0.005;
 
     // attriti: percentuale di velocita' che viene mantenuta
     // 1 = no attrito
     // <<1 = attrito grande
-    attritoZ = 0.99;  // piccolo attrito sulla Z (nel senso di rotolamento delle ruote)
-    attritoX = 0.8;  // grande attrito sulla X (per non fare slittare la macchina)
+    attritoZ = 0.99;  // piccolo attrito sulla Z 
+    attritoX = 0.8;  // grande attrito sulla X 
     attritoY = 1.0;  // attrito sulla y nullo
 
-    // Nota: vel max = accMax*attritoZ / (1-attritoZ)
-
-    raggioRuotaA = 0.2495;
-    raggioRuotaP = 0.2495;
 
     grip = 0.35; // quanto il facing macchina si adegua velocemente allo sterzo
 }
 
-/*=================== CARRERA DO STEP: facciamo un passo di fisica (a delta-t costante): Indipendente dal rendering. ===================*/
+//Indipendente dal rendering permette i movimenti del mouse
 function mouseDoStep() {
-    // computiamo l'evolversi della macchina
 
-    var vxm, vym, vzm; // velocita' in spazio macchina
+    var vxm, vym, vzm; // velocita' in spazio 
 
-    // da vel frame mondo a vel frame macchina
+    // da vel frame mondo a vel frame 
     var cosf = Math.cos(facing * Math.PI / 180.0);
     var sinf = Math.sin(facing * Math.PI / 180.0);
     vxm = +cosf * vx - sinf * vz;
@@ -62,47 +55,83 @@ function mouseDoStep() {
     // gestione dello sterzo
     if (key[1]) sterzo += velSterzo;
     if (key[3]) sterzo -= velSterzo;
-    sterzo *= velRitornoSterzo; // ritorno a volante fermo
+    sterzo *= velRitornoSterzo; // ritorno a "volante" fermo
 
-    if (incVelocitaLancio) {
-        vzm -= (accMax + 0.2);
-        incVelocitaLancio = false;
-    } else {
-        if (key[0]) vzm -= accMax; // accelerazione in avanti
-        if (key[2]) vzm += accMax; // accelerazione indietro
-    }
+    if (key[0]) vzm -= accMax; // accelerazione in avanti
+    if (key[2]) vzm += accMax; // accelerazione indietro
+    
 
     // attriti (semplificando)
     vxm *= attritoX;
     vym *= attritoY;
     vzm *= attritoZ;
 
-    // l'orientamento della macchina segue quello dello sterzo
+    // l'orientamento del mouse segue quello dello sterzo
     // (a seconda della velocita' sulla z)
     facing = facing - (vzm * grip) * sterzo;
 
-    // rotazione mozzo ruote (a seconda della velocita' sull'asse z della macchina):
-    var da; //delta angolo
-    da = (180.0 * vzm) / (Math.PI * raggioRuotaA);    //Ricavata dalla formula della velocità angolare (vedi slide 17 pacco progetto_car)
-    mozzoA += da;
-    da = (180.0 * vzm) / (Math.PI * raggioRuotaP);
-    mozzoP += da;
 
     // ritorno a vel coord mondo
     vx = +cosf * vxm + sinf * vzm;
     vy = vym;
     vz = -sinf * vxm + cosf * vzm;
 
-    // posizione = posizione + velocita * delta t (ma e' delta t costante = 1)
-    posX += vx;
-    posY += vy;
-    posZ += vz;
 
-    //TODO: Controllo collisioni
-    // if(px+Math.abs(2*Math.cos(facing)) > 3 || px-Math.abs(2*Math.cos(facing)) < -3	)
-    // px-=vx;
-    // else
-    // px+=vx;
-    // py+=vy;
-    // pz+=vz;
+
+  
+		posX+=vx;
+		posY+=vy;
+		posZ+=vz;
+	
+
+
+    //console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
+
+    if (posX >= -31 && posX <= -19
+		&& posZ >= -21 && posZ <= -9) {
+            morte=1;
+		}
+
+    if (posX >= 29 && posX <= 41
+		&& posZ >= 14 && posZ <= 26) {
+            morte=1;
+            
+		}
+
+        if (posX >= 6 && posX <= 18
+            && posZ >= -16 && posZ <= -4) {
+                morte=1;
+                
+            }
+    
+        if (posX >= 0 && posX <= 12
+            && posZ >= -41 && posZ <= -29) {
+            cartella1=true;
+           }
+
+    if (posX >= 27 && posX <= 37
+        && posZ >= -14 && posZ <= -2) {
+        cartella2=true;
+        
+        }
+		
+       
+        if (posX >= -21 && posX <= -9
+            && posZ >= 29 && posZ <= 41) {
+            cartella3=true;
+            
+            }
+
+            if (posX >= -6 && posX <= 6
+                && posZ >= -35 && posZ <= -23 && numcartella==3) {
+                pacco=true;
+                
+                }
+    
+
+    if (posX >= 70 || posX <= -70
+        || posZ >= 70 || posZ <= -70) {
+           morte=true;
+      }
+
 }

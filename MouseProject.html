@@ -4,35 +4,81 @@
     <meta charset="utf-8">
     <title>Mouse in the Odyssey</title>
     <style>
+         body {
+            background: #dddddd;
+        }
         #myCanvas {
-            border: 5px solid black;
+            margin: 10px;
+            padding: 10px;
+            background: #ffffff;
+            border: thin inset #aaaaaa;
+
+        }
+        #uiContainer{
+          position: absolute;
+          top: 35px;
+          left: 35px;
+          display: flex;
+          flex-direction: column;
+          color: #ffffff;
+          z-index: 3;
+          padding: 10px 10px 10px 10px;
+          background-color: rgba(2, 2, 2, 0.911);
+          border: 2px outset rgb(187, 68, 48);
+          }
+        .container {  /*to manage text on canvas and webgl */
+          position: relative;
+        }
+        #text {  /*to manage text on canvas and webgl */
+          background-color: transparent;  /* needed because we setcanvas bg color to white */
+          position: absolute;
+          left: 100px;
+          top: 10px;
+          z-index: 10;
         }
     </style>
 </head>
 <body>
-<canvas id="myCanvas" width="800" height="600"></canvas>
+    <div class="container"> 
+        <canvas width="1100" height="500" id="myCanvas"></canvas> 
+        <canvas width="1100" height="550" id="text"></canvas>
+      </div>
+      
+    <div id="uiContainer">
+      <div id="LightX"></div>
+      </div>
 </body>
 
 <script>
-    const canvas = document.querySelector("#myCanvas");
+    const canvas = document.getElementById("myCanvas");
     const gl = canvas.getContext("webgl");
 
+    const textCanvas = document.getElementById("text");
+    const ctx = textCanvas.getContext("2d");
+
+    //ext serve per la depth texture, se no diventa tutto nero
+    var ext = gl.getExtension('WEBGL_depth_texture');
+    if (!ext) {
+        console.log("NON SUPPORTA WEBGL_depth_texture");  // eslint-disable-line
+        }
 </script>
 
 
-<script src="resources\libraries\webgl-utils.js"></script>
-<script src="resources\libraries\m4.js"></script>
-<script type="text/javascript" src="resources/libraries/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="resources/libraries/mesh_utils.js"></script>
+
+<script type="text/javascript" src="resources/libraries/m4.js"></script>
 <script type="text/javascript" src="resources/libraries/glm_utils.js"></script>
-<script type="text/javascript" src="resources/libraries/load_mesh.js"></script>
-<script src="utils.js"></script>
+<script type="text/javascript" src="resources/libraries/webgl-lessons-ui.js"></script>
+<script type="text/javascript" src="resources/libraries/webgl-utils.js"></script>
 <script src="shaders.js"></script>
-<script src="loadObj.js"></script>
+<script src="utils.js"></script>
 <script src="Geometries.js"></script>
 <script src="MouseMoviment.js"></script>
 <script src="eventsHandlers.js"></script>
 <script src="main.js"></script>
 
+
+<script>
+   
+</script>
 
 </html>
