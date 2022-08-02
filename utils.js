@@ -19,13 +19,21 @@ function loadSkyboxTexture() {
     const texture = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture)
 
-    const faceInfos = [{target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, url: 'resources/images/prova.jpg',},
+   /* const faceInfos = [{target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, url: 'resources/images/prova.jpg',},
 					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, url: 'resources/images/prova.jpg',},
 					{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, url: 'resources/images/prova.jpg',},
 					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, url: 'resources/images/prova.jpg',},
 					{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, url: 'resources/images/prova.jpg',},
 					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, url: 'resources/images/prova.jpg',},
-					];
+					];*/
+
+	const faceInfos = [{target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, url: 'resources/images/prova.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, url: 'resources/images/prova.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, url: 'resources/images/prova.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, url: 'resources/images/prova.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, url: 'resources/images/prova.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, url: 'resources/images/prova.jpg',},
+	];
 
     faceInfos.forEach((faceInfo) => {
         const {target, url} = faceInfo;
@@ -100,7 +108,7 @@ var depthFramebuffer, depthTextureSize, depthTexture, unusedTexture;
 function createTextureLight(){
 
 	depthTexture = gl.createTexture();
-	depthTextureSize = 512;
+	depthTextureSize = 1024;
 	gl.bindTexture(gl.TEXTURE_2D, depthTexture);
 	gl.texImage2D(
 		gl.TEXTURE_2D,      // target

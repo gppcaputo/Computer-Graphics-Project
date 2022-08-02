@@ -8,51 +8,80 @@
             background: #dddddd;
         }
         #myCanvas {
-            margin: 10px;
-            padding: 10px;
+          
+            z-index: 1;
             background: #ffffff;
             border: thin inset #aaaaaa;
 
         }
         #uiContainer{
           position: absolute;
-          top: 35px;
-          left: 35px;
+          top: 10px;
+          left: 1130px;
           display: flex;
           flex-direction: column;
-          color: #ffffff;
+          color: black;
           z-index: 3;
-          padding: 10px 10px 10px 10px;
-          background-color: rgba(2, 2, 2, 0.911);
-          border: 2px outset rgb(187, 68, 48);
+         
+          background-color: rgba(220, 212, 212, 0.201);
+          
           }
         .container {  /*to manage text on canvas and webgl */
           position: relative;
         }
+        #bottoni{
+          padding-top: 10px;
+          padding-left: 35px;
+        }
+        
         #text {  /*to manage text on canvas and webgl */
           background-color: transparent;  /* needed because we setcanvas bg color to white */
           position: absolute;
-          left: 100px;
-          top: 10px;
-          z-index: 10;
+          z-index: 1;
+          left: 0px;
+          top: 0px;
         }
+        
     </style>
 </head>
 <body>
+    <script>
+      var texture_enable=false;
+    </script>
     <div class="container"> 
-        <canvas width="1100" height="500" id="myCanvas"></canvas> 
-        <canvas width="1100" height="550" id="text"></canvas>
+        <canvas width="1115" height="550" id="text" ></canvas>>
+        <canvas width="1100" height="500" id="myCanvas" ></canvas> 
+        
+        
+        
       </div>
       
     <div id="uiContainer">
-      <div id="LightX"></div>
-      </div>
+      <div id="LightX" ></div>
+      <div id="LightY"></div>
+      <div id="LightZ"></div>
+
+     <div id="shadowOpt">
+			<input type="radio" id="shadowRadio" name="shadow" value="4" onclick="texture_enable=true">
+			<label for="shadow4">Render con ombre</label>
+      <input type="radio" id="shadowRadio" name="shadow" value="5" onclick="texture_enable=false">
+			<label for="shadow5">Render senza ombre</label>
+    <div id="bottoni" >
+      <h2>Cambia Visuale </h2>
+      <input type="button" id="button1" value="Posteriore" onclick="cambiaCamera=true;cameraLiberabis = false">
+      <input type="button" id="button2" value="Anteriore" onclick="cambiaCamera=false;cameraLiberabis = false">
+      <input type="button" id="button3" value="Dall'alto" onclick="cameraAlto=true;cameraLiberabis = false">
+    </div>
+     </div> 
 </body>
 
 <script>
-    const canvas = document.getElementById("myCanvas");
-    const gl = canvas.getContext("webgl");
+    var canvas = document.getElementById("myCanvas");
+    var text = document.getElementById("text");
+    var gl = canvas.getContext("webgl");
 
+    
+   
     const textCanvas = document.getElementById("text");
     const ctx = textCanvas.getContext("2d");
 
@@ -61,6 +90,7 @@
     if (!ext) {
         console.log("NON SUPPORTA WEBGL_depth_texture");  // eslint-disable-line
         }
+      
 </script>
 
 
@@ -68,6 +98,7 @@
 <script type="text/javascript" src="resources/libraries/m4.js"></script>
 <script type="text/javascript" src="resources/libraries/glm_utils.js"></script>
 <script type="text/javascript" src="resources/libraries/webgl-lessons-ui.js"></script>
+<script type="text/javascript" src="resources/libraries/dat.gui.js"></script>
 <script type="text/javascript" src="resources/libraries/webgl-utils.js"></script>
 <script src="shaders.js"></script>
 <script src="utils.js"></script>
@@ -78,7 +109,8 @@
 
 
 <script>
-   
+ 
+
 </script>
 
 </html>

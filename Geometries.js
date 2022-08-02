@@ -18,6 +18,7 @@ let texture_folder
 let texture_foto
 let texture_face
 let texture_win
+let texture_sphere_purple
 
 function setGeo(gl) {
     loadShere()
@@ -202,7 +203,7 @@ function loadFoto()
 
 
 function loadFolder() {
-    loadObj("resources/obj/folder.obj")
+    loadObj("resources/obj/foldertris.obj")
     const folder_array = {
         position: {numComponents: 3, data:webglVertexData[0],},
         texcoord: {numComponents: 2, data:webglVertexData[1],},
@@ -215,19 +216,19 @@ function loadFolder() {
 
 function loadCube() {
     //cubo
-    loadObj("resources/obj/cube.obj")
+    loadObj("resources/obj/computer.obj")
     const cube_array = {
         position: {numComponents: 3, data:webglVertexData[0],},
         texcoord: {numComponents: 2,data:webglVertexData[1],},
         normal: {numComponents: 3, data:webglVertexData[2],},
     }
     bufferInfo_cube = webglUtils.createBufferInfoFromArrays(gl, cube_array)
-    texture_cube = loadTextureFromImg("resources/images/timbro.jpg")
+    texture_cube = loadTextureFromImg("resources/images/macbookbis.png")
 }
 
 
 function loadShere() {
-    loadObj("resources/obj/sphere.obj")
+    loadObj("resources/obj/virus.obj")
     const sphere_array = {
         position: {numComponents: 3, data: webglVertexData[0],},
         texcoord: {numComponents: 2, data: webglVertexData[1],},
@@ -235,7 +236,8 @@ function loadShere() {
     }
 
     bufferInfo_sphere = webglUtils.createBufferInfoFromArrays(gl, sphere_array)
-    texture_sphere = loadTextureFromImg("resources/images/virus_skull.jpg")
+    texture_sphere = loadTextureFromImg("resources/images/download.png")
+    texture_sphere_purple= loadTextureFromImg("resources/images/purple.png")
     texture_face= loadTextureFromImg("resources/images/photo.jfif")
 
     console.log("bufferInfo_sphere", bufferInfo_sphere)

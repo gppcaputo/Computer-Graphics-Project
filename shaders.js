@@ -99,7 +99,7 @@ const skyFragShader = `
 		varying vec2 v_texcoord;
 		varying vec4 v_projectedTexcoord;
 		varying vec3 v_normal;
-
+		
 		void main() {
 		  // Multiply the position by the matrix.
 		  vec4 worldPosition = u_world * a_position;

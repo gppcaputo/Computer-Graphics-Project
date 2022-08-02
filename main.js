@@ -5,7 +5,9 @@ var cartella3=0;
 var pacco=false;
 var morte=false;
 var cambiaCamera=false;
+var cameraAlto=false;
 var click_end=false;
+//var texture_enable=true;
 let cameraTarget = [0, 0, 0]     //eye location of the camera dove guardiamo
 let cameraPosition = [0, 0, 0]    // center where the camera is pointed ovvero D
 let up = [0, 1, 0]  //se cambia up, ruota l'intero SDR, quindi cambiano gli assi
@@ -13,14 +15,17 @@ const zNear = 0.1   // faccia più piccola del frustum znear
 const zFar = 200   // faccia più grande del frustum znear
 const fieldOfViewRadians = degToRad(60);    //fov, aumentando questo, aumento l'ampiezza della visuale (tipo grandangolo)
 const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-const D = 17
+var D = 17
+var cameraLiberabis = false;
 var cameraLibera = false; // drag del mouse
+var drag;
 var numcartella=3;
 var bias = -0.00005;
 var cartella=false;
-const THETA= degToRad(86);
-const PHI=degToRad(23);	
+var THETA= degToRad(86);
+var PHI=degToRad(23);	
 var x_light= 270, 
+
 
 y_light= 200,
 z_light= 250, 
@@ -43,7 +48,10 @@ var projectionMatrix;
 var cameraMatrix;
 
 
-
+var settings={
+    Lightx:x_light,
+    Lighty:y_light,
+}
 
 //webglLessonsUI.setupSlider("#Lightx", {value: x_light, slide: updateLightx, min: 100, max: 250, step: 2});
 
@@ -51,6 +59,17 @@ function updateLightx(event, ui){
     x_light= ui.value;
 
 }
+
+function updateLighty(event, ui){
+    y_light= ui.value;
+
+}
+
+function updateLightz(event, ui){
+    z_light= ui.value;
+
+}
+
 var doneSomething=false; 
 			var nstep=0; 
 			var timeNow=0;
@@ -103,12 +122,30 @@ var meshProgramInfo = webglUtils.createProgramInfo(gl, [vertShader, fragShader])
     
  
     
+    function activeShadow(checkbox){
+        if(checkbox.checked){
+            console.log("shadow");
+            texture_enable = true;}
+        else{
+            texture_enable = false;
+            console.log("no shadow");}
+    }
+    
 setGeo(gl);
-createTextureLight();
+
 initMouse();
+createTextureLight();
 
 
-webglLessonsUI.setupSlider("#LightX", {value: 270, slide: updateLightx, min: 100, max: 350, step: 1});
+
+
+webglLessonsUI.setupSlider("#LightX", {value: 10, slide: updateLightx, min: 0, max: 450, step: 1});
+webglLessonsUI.setupSlider("#LightY", {value: 200, slide: updateLighty, min: 100, max: 450, step: 1});
+webglLessonsUI.setupSlider("#LightZ", {value: 250, slide: updateLightz, min: 100, max: 350, step: 1});
+
+
+
+
 
 function update(time){
 	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skip the frame if the call is too early
@@ -120,7 +157,9 @@ function update(time){
 	}
 	timeNow=time;   
 	if (doneSomething) {
-		render(time);
+		
+        render(time);
+        
 		doneSomething=false;
 	}
 	window.requestAnimationFrame(update); // get next frame
@@ -129,7 +168,8 @@ function update(time){
 
 
 
-    function render(time) {
+    function render(time) { 
+        
         time*=0.001;
         gl.enable(gl.DEPTH_TEST);
         // first draw from the POV of the light
@@ -148,7 +188,8 @@ function update(time){
     gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
     gl.viewport(0, 0, depthTextureSize, depthTextureSize);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+    
+    
     drawScene(lightProjectionMatrix, lightWorldMatrix, m4.identity(), lightWorldMatrix, colorProgramInfo,time);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -178,16 +219,36 @@ function update(time){
         cameraPosition = [posX +(D*Math.sin(degToRad(facing))), posY+7, posZ+(D*Math.cos(degToRad(facing)))]            
     }
     
+    if(cameraLiberabis){
+
+        
+
+		cameraPosition = [D*1.5*Math.sin(PHI)*Math.cos(THETA),
+					D*1.5*Math.sin(PHI)*Math.sin(THETA),
+					D*1.5*Math.cos(PHI)];
+        //console.log(cameraPosition);
+        }
+	
+
+
     if(cambiaCamera){
+        
         cameraPosition = [posX+(-D*Math.sin(degToRad(facing))), posY+20, posZ+(-D*Math.cos(degToRad(facing)))];		
     }
     
+    if (cameraAlto){
+        cameraPosition=[0,105,2];
+    }
         
-    cameraTarget = [posX, posY, posZ]
+    if(!cameraAlto){
+    cameraTarget = [posX, posY, posZ]}
+    else{
+        cameraTarget = [0,0,0];
+    }
     
     drawScene(projection,camera, textureMatrix, lightWorldMatrix, sunProgramInfo,time);
     drawSkybox(gl, skyboxProgramInfo, view, projection)
-    
+   
     drawTextInfo();
     }
 update();
@@ -199,18 +260,33 @@ function drawScene( projectionMatrix, camera, textureMatrix, lightWorldMatrix, p
     const viewMatrix = m4.inverse(camera);
 	gl.useProgram(programInfo.program);
 
-	webglUtils.setUniforms(programInfo, {
-		u_view: viewMatrix,
-		u_projection: projectionMatrix,
-		u_bias: bias,
-		u_textureMatrix: textureMatrix,
-		u_projectedTexture: depthTexture,
-		u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
-        u_lightDirection: m4.normalize([-1, 3, 5]),
-		u_lightIntensity: lightIntensity,
-		u_shadowIntensity: shadowIntensity,
-	});
-
+    if (texture_enable==true){
+        webglUtils.setUniforms(programInfo, {
+            u_view: viewMatrix,
+            u_projection: projectionMatrix,
+            u_bias: bias,
+            u_textureMatrix: textureMatrix,
+            u_projectedTexture: depthTexture,
+            u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
+            u_lightDirection: m4.normalize([-1, 3, 5]),
+            u_lightIntensity: lightIntensity,
+            u_shadowIntensity: shadowIntensity,
+        });
+    }
+    if(texture_enable==false){
+        textureMatrix = m4.identity();
+        textureMatrix = m4.scale(textureMatrix, 0, 0, 0);
+        webglUtils.setUniforms(programInfo, {
+            u_view: viewMatrix,
+            u_projection: projectionMatrix,
+            u_bias: bias,
+            u_textureMatrix: textureMatrix,
+            u_reverseLightDirection:lightWorldMatrix.slice(8, 11),
+            u_lightDirection: m4.normalize([-1, 3, 5]),
+            u_lightIntensity: lightIntensity,
+            u_shadowIntensity: shadowIntensity,
+        });
+    }
         drawMouse(programInfo)
         drawRotella(programInfo)
         drawPacco2(programInfo)
@@ -232,8 +308,9 @@ function drawScene( projectionMatrix, camera, textureMatrix, lightWorldMatrix, p
             if (pacco==false){
                 drawPacco(programInfo,time)
             }
-           
+        
         drawFoto2(programInfo,time)}
+        //drawCube(programInfo,time)
         drawFloor(programInfo)    
 }     
 
@@ -241,71 +318,76 @@ function drawScene( projectionMatrix, camera, textureMatrix, lightWorldMatrix, p
 
 function drawTextInfo(){
     if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ) {
-    ctx.drawImage(wasd_keys, 0, 330);
-    ctx.drawImage(freccie, 450, 330);  }
-    ctx.drawImage(image_menu, 771.5, 11);
+    ctx.drawImage(wasd_keys, 80, 330);
+    ctx.drawImage(freccie, 540, 330);  
+    //ctx.drawImage(button1, 300, 450);
+	//ctx.drawImage(button3, 440, 450);  
+    ctx.drawImage(image_menu, 871.5, 17);} 
+    else{
+    ctx.drawImage(image_menu, 871.5, 1);}
 	//testo
 	ctx.font = '14pt Calibri';
 	ctx.fillStyle = 'blue';
-	ctx.fillText("Prova a raccogliere tutte", 780, 50);
-	ctx.fillText("le cartelle ", 780, 70);
+	ctx.fillText("Prova a raccogliere tutte", 880, 50);
+	ctx.fillText("le cartelle ", 880, 70);
 	
     ctx.font = '14pt Calibri';
 	ctx.fillStyle = 'red';
     numcartella=cartella1+cartella2+cartella3;
     if ((numcartella)==0){
-        ctx.fillText("Cartella da raccogliere 3", 780, 100);}
+        ctx.fillText("Cartella da raccogliere 3", 880, 100);}
     else if ((numcartella)==1){
-            ctx.fillText("Cartella da raccogliere 2", 780, 100);}
+            ctx.fillText("Cartella da raccogliere 2", 880, 100);}
     else if ((numcartella)==2){
-                ctx.fillText("Cartella da raccogliere 1", 780, 100);}
+                ctx.fillText("Cartella da raccogliere 1", 880, 100);}
     else if ((numcartella)==3){
         ctx.fillStyle = 'green';
-        ctx.fillText("          Complimenti!!!!!", 780, 100);
-        ctx.fillText("    Hai raccolto tutte le cartelle", 780, 120);
+        ctx.fillText("          Complimenti!!!!!", 880, 100);
+        ctx.fillText("    Hai raccolto tutte le cartelle", 880, 120);
         ctx.font = '14pt Calibri'; 
         ctx.fillStyle = 'red';
-        ctx.fillText("      Hai fatto infuriare il boss!", 780, 190);
-        ctx.fillText("Cosa nasconderà alle sue spalle?", 780, 210);
+        ctx.fillText("      Hai fatto infuriare il boss!", 880, 190);
+        ctx.fillText("Cosa nasconderà alle sue spalle?", 880, 210);
     }
         
     if (pacco==true){
         ctx.fillStyle = 'green';
-        ctx.fillText("      Grazie per aver recuperato", 780, 230);
-        ctx.fillText("      tutti i preziosi documenti!!", 780, 250);
+        ctx.fillText("      Grazie per aver recuperato", 880, 230);
+        ctx.fillText("      tutti i preziosi documenti!!", 880, 250);
     }
 
 	ctx.font = '12pt Calibri';
 	ctx.fillStyle = 'purple';
-	ctx.fillText("Attenzione evita i virus rotanti per ", 780, 140);
-	ctx.fillText("non rimetterci i circuiti", 780, 160);
+	ctx.fillText("Attenzione evita i virus rotanti per ", 880, 140);
+	ctx.fillText("non rimetterci i circuiti", 880, 160);
 	
 	ctx.font = '10pt Calibri';
 	ctx.fillStyle = 'black';
-	ctx.fillText("----------------------------------------------------------", 771, 270);
+	ctx.fillText("----------------------------------------------------------", 871, 270);
 	ctx.font = '16pt Calibri';
 	ctx.fillStyle = 'red';
-	ctx.fillText("	 PANNELLO DI CONTROLLO 		", 770, 290);
+	ctx.fillText("	             CONTROLLI 		", 870, 290);
 	ctx.font = '13pt Calibri';
 	ctx.fillStyle = 'black';
-    ctx.fillText("          Controllo movimento", 780, 310);
+    ctx.fillText("          Controllo movimento", 880, 310);
     ctx.font = '12pt Calibri';
-	ctx.fillText("          W avanti            A sinistra", 780, 330); 
-	ctx.fillText("          S indietro          D destra", 780, 350); 
+	ctx.fillText("          W avanti            A sinistra", 880, 330); 
+	ctx.fillText("          S indietro          D destra", 880, 350); 
     ctx.font = '13pt Calibri';
-    ctx.fillText("Controllo movimento camera", 780, 380);
-	ctx.fillText("con le freccie direzionali ⇑⇓⇒⇐", 780, 400); 
+    ctx.fillText("Controllo movimento camera", 880, 380);
+	ctx.fillText("con le freccie direzionali ⇑⇓⇒⇐", 880, 400); 
+    ctx.fillText("o con il movimento del mouse", 880, 420);
 	ctx.font = '13pt Calibri';
-	ctx.fillText("                  Cambia visuale", 780, 440); 
+	ctx.fillText("Puoi avvicinare e allontare la", 880, 440); 
+    ctx.fillText("camera con la rotella del mouse", 880, 460); 
 	
     //bottoni
-	ctx.drawImage(button1, 780, 450);
 	
-	ctx.drawImage(button3, 920, 450);
 
     
    if(morte==1){
-        ctx.drawImage(matrix,0,0,gl.canvas.clientWidth,gl.canvas.clientHeight);
+        
+        ctx.drawImage(matrix,0,0,text.clientWidth,text.clientHeight);
         ctx.drawImage(retry,480, 175);
                     }
 
@@ -323,7 +405,7 @@ function drawMouse(ProgramInfo){
    // u_model4 = m4.yRotate(u_model4, degToRad(180));
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_mouse)
     webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
+       // u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model4,
         u_texture: texture_mouse,
     })
@@ -348,13 +430,13 @@ function drawVirus(ProgramInfo,time){
     let u_model = m4.identity()
     
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(-25, 5, -15), 5,5,5)
+    u_model = m4.scale(m4.translation(-25, 1, -15), 5,5,5)
     u_model = m4.yRotate(u_model, time)
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
         u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model,
-        u_texture: texture_sphere
+        u_texture: texture_sphere,
     })
     webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
 }
@@ -364,8 +446,8 @@ function drawVirus2(ProgramInfo,time){
     let u_model = m4.identity()
 //  u_model = m4.yRotate(u_model, time)
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(35, 5, 20), 5,5,5)
-    u_model = m4.xRotate(u_model, time)
+    u_model = m4.scale(m4.translation(35, 1, 20), 5,5,5)
+    u_model = m4.yRotate(u_model, time)
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
         u_colorMult: [0.5, 0.5, 1, 1],
@@ -380,15 +462,15 @@ function drawVirus3(ProgramInfo,time){
     let u_model = m4.identity()
 //  u_model = m4.yRotate(u_model, time)
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(12, 5,-10), 5,5,5)
+    u_model = m4.scale(m4.translation(12, 1,-10), 5,5,5)
     
-    u_model = m4.xRotate(u_model, time)
+    u_model = m4.yRotate(u_model, time)
     
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
         u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model,
-        u_texture: texture_sphere
+        u_texture: texture_sphere_purple
     })
     webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
 }
@@ -398,22 +480,22 @@ function drawVirus4(ProgramInfo,time){
     let u_model = m4.identity()
 //  u_model = m4.yRotate(u_model, time)
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(10, 9.8,30), 5,10,5)
-    u_model=m4.yRotate(u_model,degToRad(180))
+    u_model = m4.scale(m4.translation(10, 1,30), 5,5,5)
+    //u_model=m4.xRotate(u_model,degToRad(180))
     u_model = m4.yRotate(u_model, time)
     
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
         //u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model,
-        u_texture: texture_face
+        u_texture: texture_sphere_purple
     })
     webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
 }
 
 //secondo cubo??
 function drawFolder(ProgramInfo,time){
-    let u_modelfolder = m4.scale(m4.translation(6,0,-35), 1, 1, 1)
+    let u_modelfolder = m4.scale(m4.translation(6,0,-35), 1.3, 1.3, 1.3)
     u_modelfolder = m4.yRotate(u_modelfolder, time);
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_folder)
     webglUtils.setUniforms(ProgramInfo, {
@@ -426,7 +508,7 @@ function drawFolder(ProgramInfo,time){
 
     
 function drawFolder2(ProgramInfo,time){
-    let u_modelfolder = m4.scale(m4.translation(32,0,-8), 1, 1, 1)
+    let u_modelfolder = m4.scale(m4.translation(32,0,-8), 1.3, 1.3, 1.3)
     u_modelfolder = m4.yRotate(u_modelfolder, time);
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_folder)
     webglUtils.setUniforms(ProgramInfo, {
@@ -439,11 +521,11 @@ function drawFolder2(ProgramInfo,time){
 
 
 function drawFolder3(ProgramInfo,time){
-    let u_modelfolder = m4.scale(m4.translation(-15,0,35), 1, 1, 1)
+    let u_modelfolder = m4.scale(m4.translation(-15,0,35), 1.3, 1.3, 1.3)
     u_modelfolder = m4.yRotate(u_modelfolder, time);
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_folder)
     webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
+        //u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_modelfolder,
         u_texture: texture_folder,
     })
