@@ -1,0 +1,221 @@
+
+<!doctype html>
+<html>
+	<head>
+		<title>The Mouse Odissey</title>
+		<style>
+			h1 {
+				color: rgb(53, 109, 62);
+				font-size: 50px;
+			}
+			h1, h2, h3 {
+				position: relative;
+				text-align: center;
+			}
+			p, ul, li {
+				margin-left: 20px;
+				margin-right: 20px;
+				font-size: 20px;
+			}
+			body {
+			  background-color: white;
+			}
+			div {
+				width:100%;
+				display: flex;
+				justify-content: center;
+			}
+			img {
+				margin: 5px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<h1>The Mouse Odissey</h1>
+		<h2>Progetto di Fondamenti di Computer Graphics</h2>
+		<h3>Francesco Piconi mat.0001054500 del corso Magistrale in Informatica</h3>
+		
+		<div>
+			<img src="Prima_view.png" height="600" >
+		</div>
+		
+		<br>
+		<h2>Introduzione e contesto</h2>
+		<p>
+			L'impavido mouse, nonostante sia stato abbandonato da tutti gli altri accessori per Pc, decide comunque di provare ad affrontare 
+            i virus insinuati nel computer, a causa della negligenza dello studente che lo usa quotidianamente. Il pericolo che corre è grande, visto
+            che basterebbe un solo contatto con uno dei virus per risucchiarlo nel matrix senza più speranza di ritorno.<br>
+		</p>
+		<p>
+			Lo scopo del gioco è recuperare le varie cartelle sparse nella mappa prima che i virus che ne compromettano il contenuto.
+            In particolare, si dovranno recuperare tre cartelle per poi avere nuove istruzioni su come continuare. <br>
+			
+		</p>
+		<br>
+		<br>
+		<h2>Ambiente</h2>
+		
+		<div>
+			<img src="Floor.png" height="350" >
+
+		
+		</div>
+		
+		<p>
+			Per la realizzazione della scena, sono state utilizzate diverse tecniche.<br>
+			Prima di tutto è stato creato uno skybox tramite un cubo texturato adeguatamente e tramite la visone prospettica 
+            quest'ultimo restituisce la sensazione di un mondo infinito. L'ambiente è stato poi reso "vivo" creando un piano 
+            con l'applicazione della texture di una tastiera, per andare a creare una scena quanto piò verosimile ad un computer. La dimesione del piano corrisponde
+            alla dimensione della mappa. Infatti se con il mouse ci si spimge oltre la fine del piano, viende stampato un immagine che non permette di prosegire nel gioco
+            e permette al giocatore di ricominciare la partita tramite un bottone.
+            Per completare la resa  è stato creato un cubo su cui è stata applicata la texture di uno schermo di un pc. Ora che la scena 
+            è stata definita si può inizare a trattare gli oggetti che la animano.
+		</p>
+		<br>
+        <br>
+
+		<h2>Mesh</h2>
+        <div>
+            <p>
+            La scena è composta da diverse Mesh che vengono importate da altrettanti file in formato Wavefront OBJ.
+            La più complicata, cioè il mouse è stato reperito online e poi modificato per ottenere l'effetto desiderato nella scena. Infatti 
+            l'oggeto risultava troppo complicato e pesante, quindi si è proseguito a delle modifiche che non hanno impattato in maniera significativa sulla sua resa,
+            ma che ne hanno notevolmente semplificato la sua mesh. 
+            Un altro oggetto da notare è la cartella che è stata realizzata tramite Blender in pochi semplici mosse.
+            Per importare le mesh nella scena utilizzo la funzione <i>loadObj</i> presente nel file <i>utils.</i>
+            </p>
+        </div>
+        <div>
+			<img src="mouse.png" height="400" >
+            <img src="folder.png" height="400" >
+		</div>
+        <br>
+        <br>
+        <h2>Texture</h2>
+        <div>
+            <p>
+                Ad ogni oggeto della scena è stata applicata una texture. Per l'implementazione delle texture ho seguito gli esempi dei codici visti a lezione. Ho creato delle
+                 texture utilizzando WebGL e le sue funzioni, in particolare "gl.createTexture()" e "gl.texImage2D()", che se possibile applica alle immagini 
+                 la tecnica del "mipmap" oppure vengono settati dei parametri standard per la sua gestione. Per riuscire ad avere un effetto più verosimile il mouse e la rotella
+                 sono stati importati come due oggetti distinti che si muovono nella stessa direzione. Ho inoltre utilizzato come texture una foto personale,come richiesto dalla consegna, 
+                 per creare il boss finale che appare nel momento in cui tutte le cartelle sono state recuperate.
+            </p>
+        </div>
+        <div>
+			<img src="texture_virus.png" height="400" >
+            <img src="texture_mouse.png" height="400" >
+		</div>
+
+
+		<br>
+		<br>
+		<h2>Illuminazione e ombre</h2>		
+		<p>	
+			Per illuminare il mondo, è stata posta una luce sulla sommità del cubo in modo da simulara una sorta di luce naturale.
+			Tale luce è costruita come una luce direzionale che, colpendo gli oggetti, grazie ad una depth_texture (che sfrutta 
+			le coordinate di profondità), è in grado di determinare quali oggetti siano in ombra e quali no. Attraverso l'interazione l'utente può andare a modificare 
+            un parametro della luce, e cioè la sua posizione rispetto all'asse x.
+			Si è poi stabilito un bias fisso che limiti il cosiddetto effetto "shadow acne", per quanto possibile.
+			<br><br>
+			Il problema principale di questo tipo di illuminazione sono le ombre: infatti esse risultano leggermente pixelate sia sugli oggetti, 
+			sia nella loro proiezione prospettica sul piano, andando a resituire un risultato più che accettabile, ma restando comunque di bassa qualità. 
+			Un possibile miglioramento, sarebbe quello di applicare un algoritmo di shading performante per riuscire a smussare i contorni delle ombre restituendo 
+            un effetto più verosimile.
+		</p>
+
+        <div>
+			<img src="ombre.png" height="400" >
+			<img src="ombre2.png" height="400" >
+			
+		</div>
+		<br>
+		<br>
+		<h2>Animazioni</h2>		
+		<p>	
+			Il movimento del mouse all'interno della scena è stato gestito prendendo spunto dal file cg-car2.js fornitoci a lezione.
+            Infatti la fisica utilizzata ricalca molto da vicino quella di un'auto con l'unica differenza che non deve essere gestiro anche il movimento
+            delle ruote.
+
+			<br><br>
+            Il movimento nella mapppa del mouse è caratterizzato da alcune collisioni che può avere con gli oggetti in scena. Infatti utilizzando la coordinate x,y,z del mouse
+            si è in grado di determinare in che punto siamo localizzati e di conseguneza capire se si è entrati in collisione con un oggetto o meno.
+            Sono state implementae due tipi collissioni:
+            <ul>
+                <li>quelle con i virus</li>
+                <li>quelle con le cartelle</li>
+        
+            </ul>
+        </p>
+        <p>
+            Entrare in contatto con un virus provaca la fine del gioco, permettendo di ricominciare la partita grazie ad un bottone di restart.
+            Mentre la collisione con le cartelle porta alla scomparsa di quest'ultime dalla scena, andando inoltre a comunicare all'utente di aver recuperato una cartella.
+			
+            <div>
+                <img src="endgame.png" height="400" >
+            </div>
+		</p>
+		<p>
+       I virus presenti nella scena sono soggetti a rotazione rispetto ai propri assi. Queste rotazioni sono stata realizzate tramite la libreria "m4.js"
+        e in particolare le funzione "m4.yRotate(m, angleInRadians, dst)" e "m4.xRotate(m, angleInRadians, dst)" che permettono di rotare una matrice in base ai suoi assi.
+    </p>
+        <br>
+		<br>
+		<h2>Interazione con l'interfaccia</h2>
+		<p>
+			All'utente sono permesse diverse interazioni, fruibili sia da pc che su mobile.
+			Principalmente l'interfaccia si presenta con una canvas in cui si vede l'ambientazione e affianco una descrizione dei comandi.
+            L'interazione è possibile:
+		</p>	
+			<ul>
+				<li>Attraverso la tastiera</li>
+				<li>Attraverso il click del mouse</li>
+				<li>Attraverso il touchscreen (nel caso mobile)</li>
+			</ul>
+
+		<h3>Versione Desktop</h3>		
+		<p>
+			In questa versione per muovere il mouse e è necessario utilizzare i tasti W,A,S,D rispettivamente 
+            per muoveri in avanti, a sinistra, indietro e a destra.
+            <br><br>
+            L'utilizzo delle freccie da la possibilità di effettura dei movimenti della camera nelle tre direzioni, lasciando
+            però come target di riferimento il mouse nella scena.
+		<p>
+            Sono inoltre disponibili due bottoni in basso a destra nel pannello per permettere di spostare la camera dalla visione 
+            posteriore a quella anteriore del mouse e viceversa.<br>
+			In alto a sinistra è stato infine inserito uno slider per gestire la direzione della luce nella scena, andando a modificare 
+            solo la posizione relativa alla coordinata x della luce.
+		</p>
+		<p>
+			Infine, per avere una visione più globale di dove si trova l'automobile, è possibile utilizzare il drag del 
+			mouse per modificare la visuale. L'utilizzo di questo tipo di funzione è temporaneo, ossia, non appena verrà 
+			rilasciato il mouse, si ritornerà alla visuale di default, che è quella che ci permette di vedere in che 
+			direzione sta andando l'auto.
+		</p>
+		<div>
+			<img src="desktop.png" height="300" >
+		</div>
+		<br>
+		<h3>Versione Mobile</h3>
+	
+		<p>
+			Per ovviare alla mancanza della tastiera durante il gioco nella versione mobile, sulla sinistra della canvas sono stati posti
+			quattro bottoni che permettono di muoversi nella scena.
+            <br><
+			La posizione di questi quattro bottoni è stata quindi scelta apposta per fare in modo che il giocatore possa
+			impugnare lo smartphone e utilizzare i pollici di entrambe le mani, come fosse un joystick di una console di gioco.
+		</p>
+		<p>		
+			Mentre sulla destra della canvas sono stati inseriti quattro bottoni che permettono di spostare la camera. 
+            I bottoni presenti anche nella versione Desktop rimangono immutati, e continuano a svolgere la stessa funzione.
+		</p>
+		<div>
+			<img src="mobile.png" height="300" >
+		</div>
+		
+	<h2>Funzionalita' WebGL utilizzate</h2>
+    <p>Come già discusso sono state impiegate diverse librerie come supporto. Le librerie in questione "webgl-lessons-ui.js" e "m4.js" sono state riprese dalle lezioni 
+        e sfruttate per velocizzare la scrittura del codice. La prima principalmente usata in maniera facile e veloce per inserire lo slider nel canvas ha grandi potenzialità nell'interazione 
+        con l'utente. Mentre la seconda è stata usata per semplificare molti calcoli tra matrici,
+        fondamentali nello sviluppo del codice.
+	</body>

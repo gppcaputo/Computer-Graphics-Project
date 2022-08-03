@@ -228,7 +228,7 @@ function loadCube() {
 
 
 function loadShere() {
-    loadObj("resources/obj/virus.obj")
+    loadObj("resources/obj/virus3.obj")
     const sphere_array = {
         position: {numComponents: 3, data: webglVertexData[0],},
         texcoord: {numComponents: 2, data: webglVertexData[1],},

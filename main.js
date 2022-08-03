@@ -24,7 +24,7 @@ var bias = -0.00005;
 var cartella=false;
 var THETA= degToRad(86);
 var PHI=degToRad(23);	
-var x_light= 270, 
+var x_light= 10, 
 
 
 y_light= 200,
@@ -32,9 +32,9 @@ z_light= 250,
 x_targetlight= 0,	
 y_targetlight= 0,	
 z_targetlight= 0, 				
-width_projLight= 2000,
-height_projLight= 2000,
-fovLight = 10,
+width_projLight= 3000,
+height_projLight= 1200,
+fovLight = 12,
 lightIntensity= 2.5,
 shadowIntensity=0.9;
 
@@ -47,11 +47,6 @@ var lightProjectionMatrix;
 var projectionMatrix;
 var cameraMatrix;
 
-
-var settings={
-    Lightx:x_light,
-    Lighty:y_light,
-}
 
 //webglLessonsUI.setupSlider("#Lightx", {value: x_light, slide: updateLightx, min: 100, max: 250, step: 2});
 
@@ -71,10 +66,10 @@ function updateLightz(event, ui){
 }
 
 var doneSomething=false; 
-			var nstep=0; 
-			var timeNow=0;
+var nstep=0; 
+var timeNow=0;
 
-			const PHYS_SAMPLING_STEP=20; 
+const PHYS_SAMPLING_STEP=20; 
 
 var meshProgramInfo = webglUtils.createProgramInfo(gl, [vertShader, fragShader]);
 
@@ -120,32 +115,15 @@ var meshProgramInfo = webglUtils.createProgramInfo(gl, [vertShader, fragShader])
     retry.src = "resources/images/reset.png";
     retry.addEventListener('load', function() {});
     
- 
-    
-    function activeShadow(checkbox){
-        if(checkbox.checked){
-            console.log("shadow");
-            texture_enable = true;}
-        else{
-            texture_enable = false;
-            console.log("no shadow");}
-    }
-    
+
 setGeo(gl);
 
 initMouse();
 createTextureLight();
 
-
-
-
 webglLessonsUI.setupSlider("#LightX", {value: 10, slide: updateLightx, min: 0, max: 450, step: 1});
 webglLessonsUI.setupSlider("#LightY", {value: 200, slide: updateLighty, min: 100, max: 450, step: 1});
 webglLessonsUI.setupSlider("#LightZ", {value: 250, slide: updateLightz, min: 100, max: 350, step: 1});
-
-
-
-
 
 function update(time){
 	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skip the frame if the call is too early
@@ -156,23 +134,19 @@ function update(time){
 		return; // return as there is nothing to do
 	}
 	timeNow=time;   
-	if (doneSomething) {
-		
-        render(time);
-        
+	if (doneSomething) {	
+        render(time);   
 		doneSomething=false;
 	}
 	window.requestAnimationFrame(update); // get next frame
-
 }
 
 
-
-    function render(time) { 
-        
-        time*=0.001;
-        gl.enable(gl.DEPTH_TEST);
-        // first draw from the POV of the light
+function render(time) { 
+    
+    time*=0.001;
+    gl.enable(gl.DEPTH_TEST);
+    // first draw from the POV of the light
     lightWorldMatrix = m4.lookAt(
         [x_light, y_light, z_light],          			// position
         [x_targetlight, y_targetlight, z_targetlight], 	// target
@@ -180,16 +154,16 @@ function update(time){
     );
 
     lightProjectionMatrix = m4.perspective(
-            degToRad(fovLight),
-            width_projLight / height_projLight,
-            10,  	// near: top of the frustum
-            700);   // far: bottom of the frustum
+        degToRad(fovLight),
+        width_projLight / height_projLight,
+        8,  	// near: top of the frustum
+        700);   // far: bottom of the frustum
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
     gl.viewport(0, 0, depthTextureSize, depthTextureSize);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
-    
+
+
     drawScene(lightProjectionMatrix, lightWorldMatrix, m4.identity(), lightWorldMatrix, colorProgramInfo,time);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -206,7 +180,7 @@ function update(time){
     textureMatrix = m4.multiply(textureMatrix, m4.inverse(lightWorldMatrix));
             
 
-    var projection = m4.perspective(fieldOfViewRadians, aspect, 0.1, 500);
+    var projection = m4.perspective(fieldOfViewRadians, aspect, 0.1, 1200);
 
     // Compute the camera's matrix using look at.
     var camera = m4.lookAt(cameraPosition, cameraTarget, up);
@@ -214,43 +188,33 @@ function update(time){
     // Make a view matrix from the camera matrix.
     var view = m4.inverse(camera);
 
-    
+
     if (!cameraLibera){
         cameraPosition = [posX +(D*Math.sin(degToRad(facing))), posY+7, posZ+(D*Math.cos(degToRad(facing)))]            
     }
-    
+
     if(cameraLiberabis){
+        cameraPosition = [D*1.5*Math.sin(PHI)*Math.cos(THETA),D*1.5*Math.sin(PHI)*Math.sin(THETA),D*1.5*Math.cos(PHI)];
+    }
 
-        
-
-		cameraPosition = [D*1.5*Math.sin(PHI)*Math.cos(THETA),
-					D*1.5*Math.sin(PHI)*Math.sin(THETA),
-					D*1.5*Math.cos(PHI)];
-        //console.log(cameraPosition);
-        }
-	
-
-
-    if(cambiaCamera){
-        
+    if(cambiaCamera){   
         cameraPosition = [posX+(-D*Math.sin(degToRad(facing))), posY+20, posZ+(-D*Math.cos(degToRad(facing)))];		
     }
-    
+
     if (cameraAlto){
         cameraPosition=[0,105,2];
     }
         
     if(!cameraAlto){
-    cameraTarget = [posX, posY, posZ]}
+        cameraTarget = [posX, posY, posZ]}
     else{
         cameraTarget = [0,0,0];
     }
-    
+
     drawScene(projection,camera, textureMatrix, lightWorldMatrix, sunProgramInfo,time);
     drawSkybox(gl, skyboxProgramInfo, view, projection)
-   
     drawTextInfo();
-    }
+}
 update();
 window.requestAnimationFrame(update);
 
@@ -287,33 +251,33 @@ function drawScene( projectionMatrix, camera, textureMatrix, lightWorldMatrix, p
             u_shadowIntensity: shadowIntensity,
         });
     }
-        drawMouse(programInfo)
-        drawRotella(programInfo)
-        drawPacco2(programInfo)
-        drawVirus(programInfo,time)
-        drawVirus2(programInfo,time)
-        drawVirus3(programInfo,time)
-        drawVirus4(programInfo,time)
-        if (cartella1==0){
-            drawFolder(programInfo,time)
-        }
-        if (cartella2==0){
-            drawFolder2(programInfo,time)
-        }
-        if (cartella3==0){
-        drawFolder3(programInfo,time)}
-        
-        
-        if(numcartella==3){
-            if (pacco==false){
-                drawPacco(programInfo,time)
-            }
-        
-        drawFoto2(programInfo,time)}
-        //drawCube(programInfo,time)
-        drawFloor(programInfo)    
-}     
 
+    drawMouse(programInfo)
+    drawRotella(programInfo)
+    drawSchermo(programInfo)
+    drawVirus(programInfo,time)
+    drawVirus2(programInfo,time)
+    drawVirus3(programInfo,time)
+    drawVirus4(programInfo,time)
+    if (cartella1==0){
+        drawFolder(programInfo,time)
+    }
+    if (cartella2==0){
+        drawFolder2(programInfo,time)
+    }
+    if (cartella3==0){
+    drawFolder3(programInfo,time)}
+    
+    
+    if(numcartella==3){
+        if (pacco==false){
+            drawPacco(programInfo,time)
+        }
+    
+    drawFoto2(programInfo,time)}
+    //drawCube(programInfo,time)
+    drawFloor(programInfo)    
+}     
 
 
 function drawTextInfo(){
@@ -322,15 +286,14 @@ function drawTextInfo(){
     ctx.drawImage(freccie, 540, 330);  
     //ctx.drawImage(button1, 300, 450);
 	//ctx.drawImage(button3, 440, 450);  
-    ctx.drawImage(image_menu, 871.5, 17);} 
-    else{
-    ctx.drawImage(image_menu, 871.5, 1);}
+    ctx.drawImage(image_menu, 871.5, 17);
+    } 
+    else{ctx.drawImage(image_menu, 871.5, 1);}
 	//testo
 	ctx.font = '14pt Calibri';
 	ctx.fillStyle = 'blue';
 	ctx.fillText("Prova a raccogliere tutte", 880, 50);
 	ctx.fillText("le cartelle ", 880, 70);
-	
     ctx.font = '14pt Calibri';
 	ctx.fillStyle = 'red';
     numcartella=cartella1+cartella2+cartella3;
@@ -347,20 +310,19 @@ function drawTextInfo(){
         ctx.font = '14pt Calibri'; 
         ctx.fillStyle = 'red';
         ctx.fillText("      Hai fatto infuriare il boss!", 880, 190);
-        ctx.fillText("Cosa nasconderà alle sue spalle?", 880, 210);
+        ctx.fillText("Cosa nasconde alle sue spalle?", 880, 210);
     }
         
     if (pacco==true){
         ctx.fillStyle = 'green';
-        ctx.fillText("      Grazie per aver recuperato", 880, 230);
-        ctx.fillText("      tutti i preziosi documenti!!", 880, 250);
+        ctx.fillText("    Grazie per aver recuperato", 880, 230);
+        ctx.fillText("    tutti i preziosi documenti!!", 880, 250);
     }
 
 	ctx.font = '12pt Calibri';
 	ctx.fillStyle = 'purple';
 	ctx.fillText("Attenzione evita i virus rotanti per ", 880, 140);
 	ctx.fillText("non rimetterci i circuiti", 880, 160);
-	
 	ctx.font = '10pt Calibri';
 	ctx.fillStyle = 'black';
 	ctx.fillText("----------------------------------------------------------", 871, 270);
@@ -381,19 +343,12 @@ function drawTextInfo(){
 	ctx.fillText("Puoi avvicinare e allontare la", 880, 440); 
     ctx.fillText("camera con la rotella del mouse", 880, 460); 
 	
-    //bottoni
-	
-
-    
-   if(morte==1){
-        
+   if(morte==1){  
         ctx.drawImage(matrix,0,0,text.clientWidth,text.clientHeight);
         ctx.drawImage(retry,480, 175);
-                    }
-
     }
 
-
+}
 
 
 // -----------------------------------------------------------
@@ -569,18 +524,18 @@ function drawPacco(ProgramInfo){
     }
         
 
-    function drawPacco2(ProgramInfo){
-        let u_modelfoto=m4.identity()
-        u_modelfoto=m4.scale(m4.translation(0,40,-62),140,80,4)
-        //u_modelfoto=m4.yRotate(u_modelfoto,degToRad(90))
-        //u_modelfoto = m4.zRotate(m4.identity(), 90)
-        webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_foto)
-        webglUtils.setUniforms(ProgramInfo, {
-            u_world: u_modelfoto,
-            u_texture: texture_win,
-        })
-        webglUtils.drawBufferInfo(gl, bufferInfo_foto)
-        }
+function drawSchermo(ProgramInfo){
+    let u_modelfoto=m4.identity()
+    u_modelfoto=m4.scale(m4.translation(0,45,-66),140,90,1)
+    //u_modelfoto=m4.yRotate(u_modelfoto,degToRad(90))
+    //u_modelfoto = m4.zRotate(m4.identity(), 90)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_foto)
+    webglUtils.setUniforms(ProgramInfo, {
+        u_world: u_modelfoto,
+        u_texture: texture_win,
+    })
+    webglUtils.drawBufferInfo(gl, bufferInfo_foto)
+    }
 
 function drawFoto2(ProgramInfo,time){
     let u_modelfoto=m4.identity()

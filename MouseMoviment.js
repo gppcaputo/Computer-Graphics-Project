@@ -85,7 +85,7 @@ function mouseDoStep() {
 	
 
 
-    //console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
+    console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
 
     if (posX >= -31 && posX <= -19
 		&& posZ >= -21 && posZ <= -9) {
@@ -103,6 +103,18 @@ function mouseDoStep() {
                 morte=1;
                 
             }
+
+    if (posX >= 3 && posX <= 17.5
+        && posZ >= 23 && posZ <= 36.5) {
+            morte=1;
+            
+        }
+
+    if (posX >= -5.5 && posX <= 5
+        && posZ >= -15 && posZ <= -4
+        && cartella1==true && cartella2==true && cartella3==true) {
+            morte=1;
+        }
     
         if (posX >= 0 && posX <= 12
             && posZ >= -41 && posZ <= -29) {
@@ -129,8 +141,8 @@ function mouseDoStep() {
                 }
     
 
-    if (posX >= 70 || posX <= -70
-        || posZ >= 70 || posZ <= -70) {
+    if (posX >= 67.8 || posX <= -67.8
+        || posZ >= 67.7 || posZ <= -58.8) {
            morte=true;
       }
 
