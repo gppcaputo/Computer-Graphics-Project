@@ -85,7 +85,7 @@ function mouseDoStep() {
 	
 
 
-    console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
+    //console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
 
     if (posX >= -31 && posX <= -19
 		&& posZ >= -21 && posZ <= -9) {

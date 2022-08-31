@@ -2,6 +2,7 @@ window.addEventListener("keydown", doKeyDown, true);
 window.addEventListener("keyup", doKeyUp, true);
 window.addEventListener("touchstart", doTouchDown, true);
 window.addEventListener("touchend", doTouchUp, true);
+
 if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
   text.addEventListener("mousedown", mouseDown);
   text.addEventListener("mouseup", mouseUp);
@@ -18,7 +19,7 @@ document.onmousemove = function (event) {
 };
 setInterval(pointerCheck, 1000);
 function pointerCheck() {
-  console.log("Cursor at: " + pointerX + ", " + pointerY);
+  //console.log("Cursor at: " + pointerX + ", " + pointerY);
 }
 
 function zoom(event) {
@@ -27,7 +28,7 @@ function zoom(event) {
 }
 
 function mouseDown(e) {
-  console.log("mouseDown");
+  //console.log("mouseDown");
   drag = true;
   cameraLiberabis = true;
   (old_x = e.pageX), (old_y = e.pageY);
@@ -42,7 +43,7 @@ function mouseUp(e) {
 
 function mouseMove(e) {
   if (!drag) return false;
-  console.log("mouseMove");
+  //console.log("mouseMove");
   dX = (-(e.pageX - old_x) * 2 * Math.PI) / canvas.width;
   dY = (-(e.pageY - old_y) * 2 * Math.PI) / canvas.height;
   //console.log("dX: " + dX + " dY: " + dY);
@@ -79,20 +80,27 @@ function doKeyDown(e) {
       break;
     case "ArrowUp":
       cameraPosition[1] += 0.14;
-      cameraLibera = true;
+      camera_posteriore=false;
+      cambiaCamera=false;
+      cameraLiberabis = false;
       break;
     case "ArrowDown":
-      cameraLibera = true;
+      camera_posteriore=false;
       cameraPosition[1] -= 0.14;
+      cambiaCamera=false;
+      cameraLiberabis = false;
       break;
     case "ArrowLeft":
-      cameraLibera = true;
+      camera_posteriore=false;
       cameraPosition[0] -= 0.14;
-
+      cambiaCamera=false;
+      cameraLiberabis = false;
       break;
     case "ArrowRight":
-      cameraLibera = true;
+      camera_posteriore=false;
       cameraPosition[0] += 0.14;
+      cambiaCamera=false;
+      cameraLiberabis = false;
       break;
     default:
       return;
@@ -135,44 +143,52 @@ function doTouchDown(e) {
   // THE W KEY
   if (x >= 190 && y >= 351 && x <= 250 && y <= 417) {
     key[0] = true;
-    cameraLibera = false;
+    //cameraLibera = false;
   }
   // THE S KEY
   if (x >= 190 && y >= 439 && x <= 251 && y <= 500) {
     key[2] = true;
-    cameraLibera = false;
+    //cameraLibera = false;
   }
   // THE A KEY
   if (x >= 106 && y >= 438 && x <= 167 && y <= 503) {
     key[1] = true;
-    cameraLibera = false;
+    //cameraLibera = false;
   }
   // THE D KEY
   if (x >= 274 && y >= 440 && x <= 335 && y <= 504) {
     key[3] = true;
-    cameraLibera = false;
+    //cameraLibera = false;
   }
 
   // THE up KEY
   if (x >= 640 && y >= 351 && x <= 700 && y <= 417) {
     cameraPosition[1] += 1;
-    cameraLibera = true;
-    console.log("cameralibera" + cameraLibera);
+    camera_posteriore=false;
+    cambiaCamera=false;
+    cameraLiberabis = false;
+    //console.log("cameralibera" + cameraLibera);
   }
   // THE down KEY
   if (x >= 640 && y >= 439 && x <= 700 && y <= 500) {
     cameraPosition[1] -= 1;
-    cameraLibera = true;
+    camera_posteriore=false;
+    cambiaCamera=false;
+    cameraLiberabis = false;
   }
   // THE left KEY
   if (x >= 556 && y >= 438 && x <= 617 && y <= 503) {
     cameraPosition[0] -= 1;
-    cameraLibera = true;
+    camera_posteriore=false;
+    cambiaCamera=false;
+    cameraLiberabis = false;
   }
   // THE right KEY
   if (x >= 724 && y >= 440 && x <= 785 && y <= 504) {
     cameraPosition[0] += 1;
-    cameraLibera = true;
+    camera_posteriore=false;
+    cambiaCamera=false;
+    cameraLiberabis = false;
   }
 }
 
@@ -207,8 +223,13 @@ function checkButtonClick(e) {
     webglLessonsUI.setupSlider("#LightX", {value: 270, slide: updateLightx, min: 0,max: 450, step: 1,});
     webglLessonsUI.setupSlider("#LightY", {value: 200,slide: updateLighty,min: 100, max: 450,step: 1,});
     webglLessonsUI.setupSlider("#LightZ", {value: 250,slide: updateLightz,min: 100,max: 350, step: 1,});
-    x_light = 270;
+    x_light = 10;
     y_light = 200;
     z_light = 250;
+    cambiaCamera=false;
+    cameraLiberabis = false;
+    cameraAlto=false; 
+    cameraLibera=false;
+    camera_posteriore=true;
   }
 }

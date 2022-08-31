@@ -4,6 +4,7 @@ var cartella2=0;
 var cartella3=0;
 var pacco=false;
 var morte=false;
+var camera_posteriore=true;
 var cambiaCamera=false;
 var cameraAlto=false;
 var click_end=false;
@@ -189,7 +190,7 @@ function render(time) {
     var view = m4.inverse(camera);
 
 
-    if (!cameraLibera){
+    if (camera_posteriore){
         cameraPosition = [posX +(D*Math.sin(degToRad(facing))), posY+7, posZ+(D*Math.cos(degToRad(facing)))]            
     }
 
@@ -197,7 +198,7 @@ function render(time) {
         cameraPosition = [D*1.5*Math.sin(PHI)*Math.cos(THETA),D*1.5*Math.sin(PHI)*Math.sin(THETA),D*1.5*Math.cos(PHI)];
     }
 
-    if(cambiaCamera){   
+    if(cambiaCamera && !cameraLiberabis){   
         cameraPosition = [posX+(-D*Math.sin(degToRad(facing))), posY+20, posZ+(-D*Math.cos(degToRad(facing)))];		
     }
 
@@ -385,11 +386,11 @@ function drawVirus(ProgramInfo,time){
     let u_model = m4.identity()
     
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(-25, 1, -15), 5,5,5)
+    u_model = m4.scale(m4.translation(-25, 5, -15), 5,5,5)
     u_model = m4.yRotate(u_model, time)
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
+       
         u_world: u_model,
         u_texture: texture_sphere,
     })
@@ -403,13 +404,13 @@ function drawVirus2(ProgramInfo,time){
 //  u_model = m4.xRotate(u_model, 123)
     u_model = m4.scale(m4.translation(35, 1, 20), 5,5,5)
     u_model = m4.yRotate(u_model, time)
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_virus)
     webglUtils.setUniforms(ProgramInfo, {
         u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model,
-        u_texture: texture_sphere
+        u_texture: texture_virus
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
+    webglUtils.drawBufferInfo(gl, bufferInfo_virus)
 }
 
 
@@ -421,29 +422,29 @@ function drawVirus3(ProgramInfo,time){
     
     u_model = m4.yRotate(u_model, time)
     
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_virus)
     webglUtils.setUniforms(ProgramInfo, {
         u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model,
-        u_texture: texture_sphere_purple
+        u_texture: texture_virus_purple
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
+    webglUtils.drawBufferInfo(gl, bufferInfo_virus)
 }
 
 
 function drawVirus4(ProgramInfo,time){
-    let u_model = m4.identity()
-//  u_model = m4.yRotate(u_model, time)
-//  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(10, 1,30), 5,5,5)
-    //u_model=m4.xRotate(u_model,degToRad(180))
-    u_model = m4.yRotate(u_model, time)
     
+
+let u_model = m4.identity()
+    
+//  u_model = m4.xRotate(u_model, 123)
+    u_model = m4.scale(m4.translation(10, 5,30), 5,5,5)
+    u_model = m4.yRotate(u_model, time)
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
-        //u_colorMult: [0.5, 0.5, 1, 1],
+       
         u_world: u_model,
-        u_texture: texture_sphere_purple
+        u_texture: texture_sphere,
     })
     webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
 }
