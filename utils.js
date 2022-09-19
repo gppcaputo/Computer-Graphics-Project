@@ -27,12 +27,12 @@ function loadSkyboxTexture() {
 					{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, url: 'resources/images/prova.jpg',},
 					];*/
 
-	const faceInfos = [{target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, url: 'resources/images/prova.jpg',},
-	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, url: 'resources/images/prova.jpg',},
-	{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, url: 'resources/images/prova.jpg',},
-	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, url: 'resources/images/prova.jpg',},
-	{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, url: 'resources/images/prova.jpg',},
-	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, url: 'resources/images/prova.jpg',},
+	const faceInfos = [{target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, url: 'resources/images/matrix.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, url: 'resources/images/matrix.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, url: 'resources/images/matrix.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, url: 'resources/images/matrix.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, url: 'resources/images/matrix.jpg',},
+	{target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, url: 'resources/images/matrix.jpg',},
 	];
 
     faceInfos.forEach((faceInfo) => {
@@ -41,8 +41,8 @@ function loadSkyboxTexture() {
         // Upload the canvas to the cubemap face.
         const level = 0;
         const internalFormat = gl.RGBA;
-        const width = 512;
-        const height = 512;
+        const width = 1024;
+        const height = 1024;
         const format = gl.RGBA;
         const type = gl.UNSIGNED_BYTE;
 

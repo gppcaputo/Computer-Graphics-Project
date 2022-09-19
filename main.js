@@ -101,14 +101,14 @@ var meshProgramInfo = webglUtils.createProgramInfo(gl, [vertShader, fragShader])
     freccie.addEventListener('load', function() {});
     
     //bottoni
-    var button1 = new Image(); 
+    /*var button1 = new Image(); 
     button1.src = "resources/images/bottone1.jpg";
     button1.addEventListener('load', function() {});
             
           
     var button3 = new Image(); 
     button3.src = "resources/images/bottone3.jpg";
-    button3.addEventListener('load', function() {});
+    button3.addEventListener('load', function() {});*/
           
     
     //restart button
@@ -386,7 +386,7 @@ function drawVirus(ProgramInfo,time){
     let u_model = m4.identity()
     
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(-25, 5, -15), 5,5,5)
+    u_model = m4.scale(m4.translation(-25, 5.5, -15), 5.5,5.5,5.5)
     u_model = m4.yRotate(u_model, time)
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {
@@ -438,7 +438,7 @@ function drawVirus4(ProgramInfo,time){
 let u_model = m4.identity()
     
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(10, 5,30), 5,5,5)
+    u_model = m4.scale(m4.translation(10, 5.5,30), 5.5,5.5,5.5)
     u_model = m4.yRotate(u_model, time)
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
     webglUtils.setUniforms(ProgramInfo, {

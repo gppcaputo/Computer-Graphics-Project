@@ -13,8 +13,8 @@
 				text-align: center;
 			}
 			p, ul, li {
-				margin-left: 20px;
-				margin-right: 20px;
+				margin-left: 40px;
+				margin-right: 40px;
 				font-size: 20px;
 			}
 			body {
@@ -82,8 +82,9 @@
             La più complicata, cioè il mouse è stato reperito online e poi modificato per ottenere l'effetto desiderato nella scena. Infatti 
             l'oggeto risultava troppo complicato e pesante, quindi si è proseguito a delle modifiche che non hanno impattato in maniera significativa sulla sua resa,
             ma che ne hanno notevolmente semplificato la sua mesh. 
-            Un altro oggetto da notare è la cartella che è stata realizzata tramite Blender in pochi semplici mosse.
-            Per importare le mesh nella scena utilizzo la funzione <i>loadObj</i> presente nel file <i>utils.</i>
+            Un altro oggetto da notare è il virus che è stata realizzato tramite Blender in pochi semplici mosse. Tramite l'estrusione e il bevelling
+			di una sfera è stato possibile ottenere un risultato molto curato, riprendendo la forma tipica dei virus.
+            Per importare le mesh nella scena viene utilizzata la funzione <i>loadObj</i> presente nel file <i>utils.</i>
             </p>
         </div>
         <div>
@@ -98,10 +99,15 @@
         <h2>Texture</h2>
         <div>
             <p>
-                Ad ogni oggeto della scena è stata applicata una texture. Per l'implementazione delle texture ho seguito gli esempi dei codici visti a lezione. Ho creato delle
-                 texture utilizzando WebGL e le sue funzioni, in particolare "gl.createTexture()" e "gl.texImage2D()", che se possibile applica alle immagini 
-                 la tecnica del "mipmap" oppure vengono settati dei parametri standard per la sua gestione. Per riuscire ad avere un effetto più verosimile il mouse e la rotella
-                 sono stati importati come due oggetti distinti che si muovono nella stessa direzione. Ho inoltre utilizzato come texture una foto personale,come richiesto dalla consegna, 
+                Ad ogni oggeto della scena è stata applicata una texture. Per l'implementazione delle texture ho seguito gli esempi 
+				dei codici visti a lezione. Ho creato delle texture utilizzando WebGL e le sue funzioni, 
+				in particolare "gl.createTexture()" e "gl.texImage2D()", che se possibile applica alle immagini 
+                 la tecnica del "mipmap" oppure vengono settati dei parametri standard per la sua gestione. 
+				 Per riuscire ad avere un effetto più verosimile il mouse e la rotella
+                 sono stati importati come due oggetti distinti che si muovono nella stessa direzione.
+				 <br>La texture delle cartelle è stata creata utilizzando un'immagine che rappresentasse della carta invecchiata e 
+				 successivamente vi è stata applicata la scritta "TOP SECRET" per avere l'effetto voluto.
+				 <br>Ho inoltre utilizzato come texture una foto personale, come richiesto dalla consegna, 
                  per creare il boss finale che appare nel momento in cui tutte le cartelle sono state recuperate.
             </p>
         </div>
@@ -114,12 +120,13 @@
 		<br>
 		<br>
 		<h2>Illuminazione e ombre</h2>		
-		<p>	
-			Per illuminare il mondo, è stata posta una luce sulla sommità del cubo in modo da simulara una sorta di luce naturale.
+		<p>		
+			Per illuminare il mondo, è stata posta una luce sulla sommità della scena in modo da simulara una sorta di luce naturale.
 			Tale luce è costruita come una luce direzionale che, colpendo gli oggetti, grazie ad una depth_texture (che sfrutta 
 			le coordinate di profondità), è in grado di determinare quali oggetti siano in ombra e quali no. Attraverso l'interazione l'utente può andare a modificare 
-            un parametro della luce, e cioè la sua posizione rispetto all'asse x.
+            i parametri della luce, e cioè la sua posizione rispetto agli assi x,y e z.
 			Si è poi stabilito un bias fisso che limiti il cosiddetto effetto "shadow acne", per quanto possibile.
+			<br>Dal pannello di controllo è possible selezionare se renderizzare la scena con le ombre prodotte dagli oggetti oppure no.
 			<br><br>
 			Il problema principale di questo tipo di illuminazione sono le ombre: infatti esse risultano leggermente pixelate sia sugli oggetti, 
 			sia nella loro proiezione prospettica sul piano, andando a resituire un risultato più che accettabile, ma restando comunque di bassa qualità. 
@@ -139,7 +146,6 @@
 			Il movimento del mouse all'interno della scena è stato gestito prendendo spunto dal file cg-car2.js fornitoci a lezione.
             Infatti la fisica utilizzata ricalca molto da vicino quella di un'auto con l'unica differenza che non deve essere gestiro anche il movimento
             delle ruote.
-
 			<br><br>
             Il movimento nella mapppa del mouse è caratterizzato da alcune collisioni che può avere con gli oggetti in scena. Infatti utilizzando la coordinate x,y,z del mouse
             si è in grado di determinare in che punto siamo localizzati e di conseguneza capire se si è entrati in collisione con un oggetto o meno.
@@ -167,33 +173,32 @@
 		<h2>Interazione con l'interfaccia</h2>
 		<p>
 			All'utente sono permesse diverse interazioni, fruibili sia da pc che su mobile.
-			Principalmente l'interfaccia si presenta con una canvas in cui si vede l'ambientazione e affianco una descrizione dei comandi.
+			Principalmente l'interfaccia si presenta con una canvas in cui si vede l'ambientazione,affianco una descrizione dei comandi,
+			e infice una serie di slider e bottoni che permettono di interagire con la luce e la posizione della camera.
             L'interazione è possibile:
 		</p>	
 			<ul>
 				<li>Attraverso la tastiera</li>
-				<li>Attraverso il click del mouse</li>
+				<li>Attraverso il mouse</li>
 				<li>Attraverso il touchscreen (nel caso mobile)</li>
 			</ul>
 
 		<h3>Versione Desktop</h3>		
 		<p>
-			In questa versione per muovere il mouse e è necessario utilizzare i tasti W,A,S,D rispettivamente 
+			In questa versione per muovere il mouse presente nella scena e è necessario utilizzare i tasti W,A,S,D rispettivamente 
             per muoveri in avanti, a sinistra, indietro e a destra.
             <br><br>
             L'utilizzo delle freccie da la possibilità di effettura dei movimenti della camera nelle tre direzioni, lasciando
             però come target di riferimento il mouse nella scena.
+			La camera può essere gestita anche trascinando il muose sulla scena, orientandosi a proprio piacimento. 
+			Inoltre attraverso la rotella del mouse è possibile gestire lo zoom.
 		<p>
-            Sono inoltre disponibili due bottoni in basso a destra nel pannello per permettere di spostare la camera dalla visione 
-            posteriore a quella anteriore del mouse e viceversa.<br>
-			In alto a sinistra è stato infine inserito uno slider per gestire la direzione della luce nella scena, andando a modificare 
-            solo la posizione relativa alla coordinata x della luce.
-		</p>
-		<p>
-			Infine, per avere una visione più globale di dove si trova l'automobile, è possibile utilizzare il drag del 
-			mouse per modificare la visuale. L'utilizzo di questo tipo di funzione è temporaneo, ossia, non appena verrà 
-			rilasciato il mouse, si ritornerà alla visuale di default, che è quella che ci permette di vedere in che 
-			direzione sta andando l'auto.
+            I bottoni presenti permettono di orientare la camera in tre posizioni. Dietro il muose, di fronte al mouse e infine una visuale 
+			dall'alto per avere tutta la scena sotto controllo. 
+			<br>
+			Gli slider danno la possibilità all'utente di mouvere la posizione della luca nelle tre direzioni x,y,z. Questa funzione risulta
+			utile e più chiara, se combinata con la selezione di mostrare le ombre prodotte dagli oggetti sulla scena.
+			Infatti è inoltre possibile selezionare se renderizzare la scena con le ombre o meno.
 		</p>
 		<div>
 			<img src="computer.png" height="300" >
@@ -204,13 +209,10 @@
 		<p>
 			Per ovviare alla mancanza della tastiera durante il gioco nella versione mobile, sulla sinistra della canvas sono stati posti
 			quattro bottoni che permettono di muoversi nella scena.
-            <br><
+            <br>
 			La posizione di questi quattro bottoni è stata quindi scelta apposta per fare in modo che il giocatore possa
-			impugnare lo smartphone e utilizzare i pollici di entrambe le mani, come fosse un joystick di una console di gioco.
-		</p>
-		<p>		
-			Mentre sulla destra della canvas sono stati inseriti quattro bottoni che permettono di spostare la camera. 
-            I bottoni presenti anche nella versione Desktop rimangono immutati, e continuano a svolgere la stessa funzione.
+			impugnare lo smartphone e utilizzare i pollici di entrambe le mani, come fosse un joystick di una console di gioco.	
+			Mentre sulla destra della canvas sono stati inseriti quattro bottoni che permettono di spostare la camera.
 		</p>
 		<div>
 			<img src="mobile.png" height="300" >

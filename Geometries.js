@@ -226,7 +226,7 @@ function loadCube() {
         normal: {numComponents: 3, data:webglVertexData[2],},
     }
     bufferInfo_cube = webglUtils.createBufferInfoFromArrays(gl, cube_array)
-    texture_cube = loadTextureFromImg("resources/images/macbookbis.png")
+    //texture_cube = loadTextureFromImg("resources/images/macbookbis.png")
 }
 
 
