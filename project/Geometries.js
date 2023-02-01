@@ -1,34 +1,42 @@
-//Buffers degli Obj
-let bufferInfo_sphere
-let bufferInfo_virus
+//Buffers degli Objpurple
+//let bufferInfo_sphere
+let bufferInfo_toxic
+//let bufferInfo_toxic2
+//let bufferInfo_toxic3
+//let bufferInfo_toxic4
 let bufferInfo_cube
 let bufferInfo_skybox
 let bufferInfo_floor
-let bufferInfo_mouse
-let bufferInfo_rotella
-let bufferInfo_folder
+let bufferInfo_snail
+let bufferInfo_lattuce
 let bufferInfo_foto
+let bufferInfo_flower
+let bufferInfo_ant
+
 //Buffers delle texture
-let texture_sphere
-let texture_virus
+//let texture_sphere
+let texture_toxic
 let texture_cube
 let texture_skybox
-let texture_mouse
+let texture_snail
 let texture_floor
-let texture_rotella
-let texture_folder
+let texture_lattuce
 let texture_foto
 let texture_face
-let texture_win
-let texture_virus_purple
+let texture_par
+let texture_flower
+let texture_ant
+
+//let texture_sphere_acid
+
 
 function setGeo(gl) {
-    loadVirus()
-    loadSphere()
+    loadToxic()
+    loadAnt()
+    loadFlower()
     loadCube()
-    loadFolder()
-    loadMouse()
-    loadRotella()
+    loadLattuce()
+    loadSnail()
     loadFloor()
     loadFoto()
     loadSkyBox()  
@@ -49,8 +57,7 @@ function loadFloor()
 		};
 
 		bufferInfo_floor = webglUtils.createBufferInfoFromArrays(gl, arrays_floor);
-        texture_floor = loadTextureFromImg("resources/images/tastiera.png")
-        //console.log("bufferInfo_florr", bufferInfo_floor)
+        texture_floor = loadTextureFromImg("resources/images/grass.jpg")
 	
 }
 
@@ -199,89 +206,85 @@ function loadFoto()
 
         
 		bufferInfo_foto = webglUtils.createBufferInfoFromArrays(gl, arrays_foto);
-        texture_foto = loadTextureFromImg("resources/images/box.jpg")
-        texture_win= loadTextureFromImg("resources/images/win.png")
+        texture_par= loadTextureFromImg("resources/images/parete.jpg")
 
 }
 
 
-function loadFolder() {
-    loadObj("resources/obj/foldertris.obj")
-    const folder_array = {
+function loadLattuce() {
+    loadObj("resources/obj/lattuga.obj")
+    const lattuce_array= {
         position: {numComponents: 3, data:webglVertexData[0],},
         texcoord: {numComponents: 2, data:webglVertexData[1],},
         normal: {numComponents: 3, data:webglVertexData[2],},
     }
-    bufferInfo_folder = webglUtils.createBufferInfoFromArrays(gl, folder_array)
-    texture_folder = loadTextureFromImg("resources/images/papers.png")
+    bufferInfo_lattuce = webglUtils.createBufferInfoFromArrays(gl, lattuce_array)
+    texture_lattuce = loadTextureFromImg("resources/images/Lettuce.jpg")
 }
 
 
 function loadCube() {
     //cubo
-    loadObj("resources/obj/computer.obj")
+    loadObj("resources/obj/cube.obj")
     const cube_array = {
         position: {numComponents: 3, data:webglVertexData[0],},
         texcoord: {numComponents: 2,data:webglVertexData[1],},
         normal: {numComponents: 3, data:webglVertexData[2],},
     }
     bufferInfo_cube = webglUtils.createBufferInfoFromArrays(gl, cube_array)
-    //texture_cube = loadTextureFromImg("resources/images/macbookbis.png")
 }
 
 
-function loadVirus() {
-    loadObj("resources/obj/virus3.obj")
-    const virus_array = {
+
+function loadToxic() {
+    loadObj("resources/obj/toxic.obj")
+    const toxic_array = {
         position: {numComponents: 3, data: webglVertexData[0],},
         texcoord: {numComponents: 2, data: webglVertexData[1],},
         normal: {numComponents: 3, data: webglVertexData[2],},
     }
 
-    bufferInfo_virus = webglUtils.createBufferInfoFromArrays(gl, virus_array)
-    texture_virus = loadTextureFromImg("resources/images/download.png")
-    texture_virus_purple= loadTextureFromImg("resources/images/purple.png")
-    texture_face= loadTextureFromImg("resources/images/photo.jfif")
+    bufferInfo_toxic = webglUtils.createBufferInfoFromArrays(gl, toxic_array)
+    texture_toxic = loadTextureFromImg("resources/images/rosso.jpg")  
+    texture_face= loadTextureFromImg("resources/images/foto.jpg") 
 
-    //console.log("bufferInfo_sphere", bufferInfo_sphere)
 }
 
-function loadSphere() {
-    loadObj("resources/obj/sphere.obj")
-    const sphere_array = {
+function loadFlower() {
+    loadObj("resources/obj/flower.obj")
+    const flower_array = {
         position: {numComponents: 3, data: webglVertexData[0],},
         texcoord: {numComponents: 2, data: webglVertexData[1],},
         normal: {numComponents: 3, data: webglVertexData[2],},
     }
 
-    bufferInfo_sphere = webglUtils.createBufferInfoFromArrays(gl, sphere_array)
-    texture_sphere = loadTextureFromImg("resources/images/virus_skull.jpg")
+    bufferInfo_flower = webglUtils.createBufferInfoFromArrays(gl, flower_array)
+    texture_flower = loadTextureFromImg("resources/images/flower.jpg")  
+   // texture_flower = createTexture(gl, "resources/images/flower.jpg") 
+
+}
+
+function loadSnail() {
+    loadObj("resources/obj/lumachina.obj")
+    const snail_array = {
+        position: {numComponents: 3, data: webglVertexData[0],},
+        texcoord: {numComponents: 2, data: webglVertexData[1],},
+        normal: {numComponents: 3, data: webglVertexData[2],},
+    }
+    bufferInfo_snail = webglUtils.createBufferInfoFromArrays(gl, snail_array)
     
-
+    texture_snail = loadTextureFromImg("resources/images/skin.jpg")
 }
 
-function loadRotella() {
-    loadObj("resources/obj/rotella.obj")
-    const rotella_array = {
+function loadAnt() {
+    loadObj("resources/obj/ant.obj")
+    const ant_array = {
         position: {numComponents: 3, data: webglVertexData[0],},
         texcoord: {numComponents: 2, data: webglVertexData[1],},
         normal: {numComponents: 3, data: webglVertexData[2],},
     }
-    bufferInfo_rotella = webglUtils.createBufferInfoFromArrays(gl, rotella_array)
-    //console.log("bufferInfo_rotella", bufferInfo_rotella)
-    texture_rotella = loadTextureFromImg("resources/images/download.png")
-}
-
-function loadMouse() {
-    loadObj("resources/obj/mouse.obj")
-    const mouse_array = {
-        position: {numComponents: 3, data: webglVertexData[0],},
-        texcoord: {numComponents: 2, data: webglVertexData[1],},
-        normal: {numComponents: 3, data: webglVertexData[2],},
-    }
-    bufferInfo_mouse = webglUtils.createBufferInfoFromArrays(gl, mouse_array)
-    //console.log("bufferInfo_mouse", bufferInfo_mouse)
-    texture_mouse = loadTextureFromImg("resources/images/plastic.jpg")
+    bufferInfo_ant = webglUtils.createBufferInfoFromArrays(gl, ant_array)
+    texture_ant = loadTextureFromImg("resources/images/ant.jpg")
 }
 
 
@@ -300,7 +303,7 @@ function loadSkyBox(){
            numComponents: 2,
        },
    });
-    //console.log("bufferInfo_skybox", bufferInfo_skybox)
+    
 }
 
 

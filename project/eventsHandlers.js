@@ -212,14 +212,15 @@ function checkButtonClick(e) {
   y = e.pageY - canvas.offsetTop;
   //retry button
   if (x >= 490 && x <= 650 && y >= 178 && y <= 236 && morte == true) {
-    initMouse();
+    initSnail();
     morte = false;
+    ant = false;
     cambiaCamera = false;
     cameraLiberabis = false;
     cameraAlto = false;
-    cartella1 = false;
-    cartella2 = false;
-    cartella3 = false;
+    lattuce1 = false;
+    lattuce2 = false;
+    lattuce3 = false;
     webglLessonsUI.setupSlider("#LightX", {value: 270, slide: updateLightx, min: 0,max: 450, step: 1,});
     webglLessonsUI.setupSlider("#LightY", {value: 200,slide: updateLighty,min: 100, max: 450,step: 1,});
     webglLessonsUI.setupSlider("#LightZ", {value: 250,slide: updateLightz,min: 100,max: 350, step: 1,});

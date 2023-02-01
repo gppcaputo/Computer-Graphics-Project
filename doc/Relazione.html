@@ -2,23 +2,32 @@
 <!doctype html>
 <html>
 	<head>
-		<title>The Mouse Odissey</title>
+		<title>SNAIL IN THE VEGETABLES GARDEN</title>
 		<style>
 			h1 {
-				color: rgb(53, 109, 62);
+				color: rgb(60, 178, 80);
 				font-size: 50px;
+                position: relative;
+                text-align: center;
 			}
-			h1, h2, h3 {
+			h2, h3, h4{
 				position: relative;
 				text-align: center;
+                color: darkblue;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
 			}
+        
 			p, ul, li {
 				margin-left: 40px;
 				margin-right: 40px;
 				font-size: 20px;
+                font-style: normal;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+               
 			}
 			body {
-			  background-color: white;
+			  background-color: rgb(252, 254, 207);
 			}
 			div {
 				width:100%;
@@ -32,97 +41,88 @@
 	</head>
 	
 	<body>
-		<h1>The Mouse Odissey</h1>
+		<h1>SNAIL IN THE VEGETABLES GARDEN</h1>
 		<h2>Progetto di Fondamenti di Computer Graphics</h2>
-		<h3>Francesco Piconi mat.0001054500 del corso Magistrale in Informatica</h3>
+		<h3>Laurea Magistrale in Informatica Curriculum A</h3>
+        <h4>Giuseppe Caputo Numero di Matricola: 1056533</h4>
 		
 		<div>
-			<img src="Prima_vista.png" height="460" >
+			<img src="totale.PNG" height="460" >
 		</div>
 		
 		<br>
-		<h2>Introduzione e contesto</h2>
+		<h2>INTRODUZIONE</h2>
 		<p>
-			L'impavido mouse, nonostante sia stato abbandonato da tutti gli altri accessori per Pc, decide comunque di provare ad affrontare 
-            i virus insinuati nel computer, a causa della negligenza dello studente che lo usa quotidianamente. Il pericolo che corre è grande, visto
-            che basterebbe un solo contatto con uno dei virus per risucchiarlo nel matrix senza più speranza di ritorno.<br>
+			La piccola lumaca durante il suo giro di ricognizione per procacciarsi del cibo si imbatte in delle succulente piante di lattuga
+            che decide di far sue, pur andando incontro ai pericolosi pesticidi che si trovano in giro per il giardino. Una volta raccolte ad attenderla però
+            ci sarà il loro proprietario che per vendetta ha fatto prigioniero il miglior amico del nostro protagonista. <br>
 		</p>
 		<p>
-			Lo scopo del gioco è recuperare le varie cartelle sparse nella mappa prima che i virus che ne compromettano il contenuto.
-            In particolare, si dovranno recuperare tre cartelle per poi avere nuove istruzioni su come continuare. <br>
+			Lo scopo del gioco è di raccogliere la lattuga sul percorso della nostra lumaca che, una volta raccolta,
+            dovrà salvare il suo amico (formica) che sembra esser stato fatto prigioniero <br>
 			
 		</p>
 		<br>
 		<br>
-		<h2>Ambiente</h2>
+		<h2>AMBIENTE</h2>
 		
 		<div>
-			<img src="Ambiente.png" height="350" >
+			<img src="vista_ambiente.PNG" height="350" >
 
 		
 		</div>
 		
 		<p>
 			Per la realizzazione della scena, sono state utilizzate diverse tecniche.<br>
-			Prima di tutto è stato creato uno skybox tramite un cubo texturato adeguatamente e tramite la visone prospettica 
-            quest'ultimo restituisce la sensazione di un mondo infinito. L'ambiente è stato poi reso "vivo" creando un piano 
-            con l'applicazione della texture di una tastiera, per andare a creare una scena quanto piò verosimile ad un computer. La dimesione del piano corrisponde
-            alla dimensione della mappa. Infatti se con il mouse ci si spimge oltre la fine del piano, viende stampato un immagine che non permette di prosegire nel gioco
-            e permette al giocatore di ricominciare la partita tramite un bottone.
-            Per completare la resa  è stato creato un cubo su cui è stata applicata la texture di uno schermo di un pc. Ora che la scena 
-            è stata definita si può inizare a trattare gli oggetti che la animano.
+			Prima di tutto è stato creato uno skybox tramite un cubo texturizzato adeguatamente e tramite la visone prospettica 
+            quest'ultimo restituisce la sensazionedi profondità tramite l'applicazione di un immagine che rapesenta un orizzonte. Per il suolo è stata applicata una texture che
+            rappresenta un prato per renderlo quanto più realistico possibile. La dimesione del piano corrisponde alla dimensione della mappa, anche se non sono stati posti dei vincoli
+            per evitare che la lumaca esca dalla scena. Per concludere è stata disegnata un parete, alla quale è stata applicata una texture che rappresenta un muro di mattoni.
+            
 		</p>
 		<br>
         <br>
 
-		<h2>Mesh</h2>
+		<h2>MESH</h2>
         <div>
             <p>
-            La scena è composta da diverse Mesh che vengono importate da altrettanti file in formato Wavefront OBJ.
-            La più complicata, cioè il mouse è stato reperito online e poi modificato per ottenere l'effetto desiderato nella scena. Infatti 
-            l'oggeto risultava troppo complicato e pesante, quindi si è proseguito a delle modifiche che non hanno impattato in maniera significativa sulla sua resa,
-            ma che ne hanno notevolmente semplificato la sua mesh. 
-            Un altro oggetto da notare è il virus che è stata realizzato tramite Blender in pochi semplici mosse. Tramite l'estrusione e il bevelling
-			di una sfera è stato possibile ottenere un risultato molto curato, riprendendo la forma tipica dei virus.
-            Per importare le mesh nella scena viene utilizzata la funzione <i>loadObj</i> presente nel file <i>utils.</i>
-            </p>
+            Nella scena possiamo trovare diverse Mesh 3D che sono state aggiunte importando i file .obj, mediante la funzione "loadOBJ()". La mesh principale,
+            che rappresenta il protagonista è una lumaca, che è stata importata da un file .obj che ho trovato online e alla quale è stata applicata una texture semplice. Tra gli altri mesh troviamo
+            le lattughe, il simbolo "toxic" che rappresenta i pesticidi, la formica che rappresenta il suo amico e i vari fiori per rendere più colorita tutta la scena. Tutte le Mesh
+            prese in considerazione,sono state prese online e sono state ritoccate tramite Blender per renderle più adatte al gioco, tramite funzionalità di rescaling, rotazione e cutting.        </p>
         </div>
         <div>
-			<img src="mouse.png" height="400" >
-            <img src="folder.png" height="400" >
+			<img src="snail.PNG" height="400" >
+            <img src="toxic.PNG" height="400" >
 		</div>
 		<div>
-			<img src="virus.png" height="400" >
+			<img src="lattuca.PNG" height="400" >
 		</div>
         <br>
         <br>
-        <h2>Texture</h2>
+        <h2>TEXTURE</h2>
         <div>
             <p>
-                Ad ogni oggeto della scena è stata applicata una texture. Per l'implementazione delle texture ho seguito gli esempi 
-				dei codici visti a lezione. Ho creato delle texture utilizzando WebGL e le sue funzioni, 
-				in particolare "gl.createTexture()" e "gl.texImage2D()", che se possibile applica alle immagini 
-                 la tecnica del "mipmap" oppure vengono settati dei parametri standard per la sua gestione. 
-				 Per riuscire ad avere un effetto più verosimile il mouse e la rotella
-                 sono stati importati come due oggetti distinti che si muovono nella stessa direzione.
-				 <br>La texture delle cartelle è stata creata utilizzando un'immagine che rappresentasse della carta invecchiata e 
-				 successivamente vi è stata applicata la scritta "TOP SECRET" per avere l'effetto voluto.
-				 <br>Ho inoltre utilizzato come texture una foto personale, come richiesto dalla consegna, 
-                 per creare il boss finale che appare nel momento in cui tutte le cartelle sono state recuperate.
+                Ad ogni oggeto della scena è stata applicata una texture seguendo gli esempi dei codici visti a lezione.
+                In particolare sono state utilizzate le funzioni "gl.createTexture()" e "gl.texImage2D()", che se possibile applica alle immagini 
+                la tecnica del "mipmap" oppure vengono settati dei parametri standard per la sua gestione. 
+                <br>Le texture utilizzate sono per quasi tutte, immagini molto semplic, mentre per la lattuga e la formica sono state utilizzate texture più complesse,
+                derivanti da UV mapping di oggetti 3D realizzati tramite Blender.
+				<br>Per concludere è stata applicata anche la texture di una foto personale ad un cubo, che rappresenta il "nemico" del nostro protagonista.
             </p>
         </div>
         <div>
-			<img src="texture_cartella_virus.png" height="400" >
-            <img src="tex_mouse.png" height="400" >
+			<img src="tex1.PNG" height="400" >
+            <img src="tex2.PNG" height="400" >
 		</div>
 
 
 		<br>
 		<br>
-		<h2>Illuminazione e ombre</h2>		
+		<h2>ILLUMINAZIONE E OMBRE</h2>		
 		<p>		
 			Per illuminare il mondo, è stata posta una luce sulla sommità della scena in modo da simulara una sorta di luce naturale.
-			Tale luce è costruita come una luce direzionale che, colpendo gli oggetti, grazie ad una depth_texture (che sfrutta 
+			Tale luce è costruita come una luce direzionale che, colpendo gli oggetti, grazie ad una <i>depth_texture</i> (che sfrutta 
 			le coordinate di profondità), è in grado di determinare quali oggetti siano in ombra e quali no. Attraverso l'interazione l'utente può andare a modificare 
             i parametri della luce, e cioè la sua posizione rispetto agli assi x,y e z.
 			Si è poi stabilito un bias fisso che limiti il cosiddetto effetto "shadow acne", per quanto possibile.
@@ -135,63 +135,47 @@
 		</p>
 
         <div>
-			<img src="ombre.png" height="400" >
-			<img src="ombre2.png" height="400" >
+			<img src="shadow.PNG" height="400" >
+			<img src="comandi_shadow.PNG" height="400" >
 			
 		</div>
 		<br>
 		<br>
-		<h2>Animazioni</h2>		
+		<h2>ANIMAZIONI</h2>		
 		<p>	
-			Il movimento del mouse all'interno della scena è stato gestito prendendo spunto dal file cg-car2.js fornitoci a lezione.
-            Infatti la fisica utilizzata ricalca molto da vicino quella di un'auto con l'unica differenza che non deve essere gestiro anche il movimento
-            delle ruote.
+			Il movimento della lumaca ricalca quello di una macchina, traendo ispirazione dagli esempi visti a lezione. In più sono state gestiti i vari eventi che 
+            comprendono il movimento della lumaca, come la collisione con gli oggetti e la fine del gioco. Tutto questo è stato realizzato in un file a parte chiamato <i>SnailMovement.js</i>.
 			<br><br>
-            Il movimento nella mapppa del mouse è caratterizzato da alcune collisioni che può avere con gli oggetti in scena. Infatti utilizzando la coordinate x,y,z del mouse
-            si è in grado di determinare in che punto siamo localizzati e di conseguneza capire se si è entrati in collisione con un oggetto o meno.
-            Sono state implementae due tipi collissioni:
-            <ul>
-                <li>quelle con i virus</li>
-                <li>quelle con le cartelle</li>
-        
-            </ul>
+            Sono state implementate due tipologie di collisioni: una positiva, che viene utilizzata per la raccolta della lattuga e per salvare il nostro amico; quella negativa,
+            che viene utilizzata per la collisione con i nostri "adversary", le sostanze tossiche e il nemico finale. Alla lattuga e alle sostanze tossiche sono state applicate delle animazioni di rotazione 
+            tramite la "utils" <i>m4.js</i>, che vanno a ruotare la matrice.
+            
         </p>
-        <p>
-            Entrare in contatto con un virus provaca la fine del gioco, permettendo di ricominciare la partita grazie ad un bottone di restart.
-            Mentre la collisione con le cartelle porta alla scomparsa di quest'ultime dalla scena, andando inoltre a comunicare all'utente di aver recuperato una cartella.
-			
+        <p>		
             <div>
-                <img src="endgame.png" height="400" >
+                <img src="endgame.PNG" height="400" >
             </div>
 		</p>
 		<p>
-       I virus presenti nella scena sono soggetti a rotazione rispetto ai propri assi. Queste rotazioni sono stata realizzate tramite la libreria "m4.js"
-        e in particolare le funzione "m4.yRotate(m, angleInRadians, dst)" e "m4.xRotate(m, angleInRadians, dst)" che permettono di rotare una matrice in base ai suoi assi.
-    </p>
+     
         <br>
 		<br>
-		<h2>Interazione con l'interfaccia</h2>
+		<h2>INTERFACCIA</h2>
 		<p>
-			All'utente sono permesse diverse interazioni, fruibili sia da pc che su mobile.
-			Principalmente l'interfaccia si presenta con una canvas in cui si vede l'ambientazione,affianco una descrizione dei comandi,
-			e infice una serie di slider e bottoni che permettono di interagire con la luce e la posizione della camera.
-            L'interazione è possibile:
+			L'interfaccia è composta dal canvas dove viene visualizzata la scena, una piccola insersione laterale dove vengono spiegate le regole del gioco e quali tasti utilizzare, una serie 
+            di button e sliders per gestire ombre, luce e visuale.
+			
 		</p>	
-			<ul>
-				<li>Attraverso la tastiera</li>
-				<li>Attraverso il mouse</li>
-				<li>Attraverso il touchscreen (nel caso mobile)</li>
-			</ul>
-
+		<p>
+            L'applicazione è utilizzabile sia da desktop che da mobile.
+        </p>
 		<h3>Versione Desktop</h3>		
 		<p>
-			In questa versione per muovere il mouse presente nella scena e è necessario utilizzare i tasti W,A,S,D rispettivamente 
-            per muoveri in avanti, a sinistra, indietro e a destra.
+			Nella versione desktop per muovere  per muovere la lumaca utilizziamo la classica combinazione di comandi WASD, che fanno muovere la lumaca rispettivamente:
+            avanti, sinistra, indietro e a destra.
             <br><br>
-            L'utilizzo delle freccie da la possibilità di effettura dei movimenti della camera nelle tre direzioni, lasciando
-            però come target di riferimento il mouse nella scena.
-			La camera può essere gestita anche trascinando il muose sulla scena, orientandosi a proprio piacimento. 
-			Inoltre attraverso la rotella del mouse è possibile gestire lo zoom.
+            Per muovere la visuale della camera, invece, è possibile utilizzare il mouse, che permette di muovere la visuale in tutte le direzioni, ma anche le freccie direzionale,
+            con maggiore accuratezza.
 		<p>
             I bottoni presenti permettono di orientare la camera in tre posizioni. Dietro il muose, di fronte al mouse e infine una visuale 
 			dall'alto per avere tutta la scena sotto controllo. 
@@ -201,7 +185,7 @@
 			Infatti è inoltre possibile selezionare se renderizzare la scena con le ombre o meno.
 		</p>
 		<div>
-			<img src="computer.png" height="300" >
+			<img src="totale.PNG" height="300" >
 		</div>
 		<br>
 		<h3>Versione Mobile</h3>
@@ -215,10 +199,10 @@
 			Mentre sulla destra della canvas sono stati inseriti quattro bottoni che permettono di spostare la camera.
 		</p>
 		<div>
-			<img src="mobile.png" height="300" >
+			<img src="mobile.PNG" height="300" >
 		</div>
 		
-	<h2>Funzionalita' WebGL utilizzate</h2>
+	<h2>LIBRERIE WEBGL UTILIZZATE</h2>
     <p>Come già discusso sono state impiegate diverse librerie come supporto. Le librerie in questione "webgl-lessons-ui.js" e "m4.js" sono state riprese dalle lezioni 
         e sfruttate per velocizzare la scrittura del codice. La prima principalmente usata in maniera facile e veloce per inserire lo slider nel canvas ha grandi potenzialità nell'interazione 
         con l'utente. Mentre la seconda è stata usata per semplificare molti calcoli tra matrici,

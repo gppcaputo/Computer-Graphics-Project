@@ -1,7 +1,7 @@
 
-// Implementazione dei metodi che permettono il movimento del mouse.
+// Implementazione dei metodi che permettono il movimento della lumaca.
 
-// STATO Mouse
+// STATO Lumaca
 // (DoStep fa evolvere queste variabili nel tempo)
 var posX, posY, posZ, facing; // posizione e orientamento
 var sterzo; 
@@ -14,9 +14,9 @@ var velSterzo, velRitornoSterzo, accMax, attrito,
 var key;
 
 
-//Inizializziamo le variabili utili  al movimento del mouse
-function initMouse() {
-    // inizializzo lo stato della macchina
+//Inizializziamo le variabili utili  al movimento della lumaca
+function initSnail() {
+    // inizializzo lo stato della lumaca
     posX = posY = posZ = facing = 0; // posizione e orientamento
     sterzo = 0;   // stato
     vx = vy = vz = 0;      // velocita' attuale
@@ -37,11 +37,11 @@ function initMouse() {
     attritoY = 1.0;  // attrito sulla y nullo
 
 
-    grip = 0.35; // quanto il facing macchina si adegua velocemente allo sterzo
+    grip = 0.35; 
 }
 
-//Indipendente dal rendering permette i movimenti del mouse
-function mouseDoStep() {
+//Indipendente dal rendering permette i movimenti della lumaca
+function snailDoStep() {
 
     var vxm, vym, vzm; // velocita' in spazio 
 
@@ -57,8 +57,8 @@ function mouseDoStep() {
     if (key[3]) sterzo -= velSterzo;
     sterzo *= velRitornoSterzo; // ritorno a "volante" fermo
 
-    if (key[0]) vzm -= accMax; // accelerazione in avanti
-    if (key[2]) vzm += accMax; // accelerazione indietro
+    if (key[0]) vzm -= accMax; // movimento in avanti
+    if (key[2]) vzm += accMax; // movimento indietro
     
 
     // attriti (semplificando)
@@ -66,7 +66,7 @@ function mouseDoStep() {
     vym *= attritoY;
     vzm *= attritoZ;
 
-    // l'orientamento del mouse segue quello dello sterzo
+    // l'orientamento della lumaca segue quello dello sterzo
     // (a seconda della velocita' sulla z)
     facing = facing - (vzm * grip) * sterzo;
 
@@ -85,18 +85,23 @@ function mouseDoStep() {
 	
 
 
-    //console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
+    console.log("posX: " + posX + " posY: " + posY + " posZ: " + posZ);
+
+    if (posX >= -17 && posX <= -14
+		&& posZ >= 7 && posZ <= 12) {
+            morte=1;
+		}
 
     if (posX >= -31 && posX <= -19
 		&& posZ >= -21 && posZ <= -9) {
             morte=1;
 		}
-
+/*
     if (posX >= 29 && posX <= 41
 		&& posZ >= 14 && posZ <= 26) {
             morte=1;
             
-		}
+		}*/
 
         if (posX >= 6 && posX <= 18
             && posZ >= -16 && posZ <= -4) {
@@ -112,38 +117,31 @@ function mouseDoStep() {
 
     if (posX >= -5.5 && posX <= 5
         && posZ >= -15 && posZ <= -4
-        && cartella1==true && cartella2==true && cartella3==true) {
+        && lattuce1==true && lattuce2==true && lattuce3==true) {
             morte=1;
         }
     
         if (posX >= 0 && posX <= 12
             && posZ >= -41 && posZ <= -29) {
-            cartella1=true;
+            lattuce1=true;
            }
 
     if (posX >= 27 && posX <= 37
         && posZ >= -14 && posZ <= -2) {
-        cartella2=true;
+        lattuce2=true;
         
         }
 		
        
         if (posX >= -21 && posX <= -9
             && posZ >= 29 && posZ <= 41) {
-            cartella3=true;
+            lattuce3=true;
             
             }
 
             if (posX >= -6 && posX <= 6
-                && posZ >= -35 && posZ <= -23 && numcartella==3) {
-                pacco=true;
+                && posZ >= -35 && posZ <= -23 && numlat==3) {
+                ant=true;
                 
                 }
-    
-
-    if (posX >= 67.8 || posX <= -67.8
-        || posZ >= 67.7 || posZ <= -58.8) {
-           morte=true;
-      }
-
 }

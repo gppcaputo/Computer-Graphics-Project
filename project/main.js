@@ -1,8 +1,8 @@
 "use strict";
-var cartella1=0;
-var cartella2=0;
-var cartella3=0;
-var pacco=false;
+var lattuce1=0;
+var lattuce2=0;
+var lattuce3=0;
+var ant=false;
 var morte=false;
 var camera_posteriore=true;
 var cambiaCamera=false;
@@ -20,9 +20,9 @@ var D = 17
 var cameraLiberabis = false;
 var cameraLibera = false; // drag del mouse
 var drag;
-var numcartella=3;
+var numlat=3;
 var bias = -0.00005;
-var cartella=false;
+var lattuce=false;
 var THETA= degToRad(86);
 var PHI=degToRad(23);	
 var x_light= 10, 
@@ -84,8 +84,8 @@ var meshProgramInfo = webglUtils.createProgramInfo(gl, [vertShader, fragShader])
 
 
     var matrix =new Image();
-    matrix.src="resources/images/skull.jpg";
-   matrix.addEventListener('load', function() {});
+    matrix.src="resources/images/sfondo2.jpg";
+    matrix.addEventListener('load', function() {});
 
     var image_menu = new Image();
     image_menu.src = "resources/images/back.jpg";
@@ -113,13 +113,13 @@ var meshProgramInfo = webglUtils.createProgramInfo(gl, [vertShader, fragShader])
     
     //restart button
     var retry = new Image(); 
-    retry.src = "resources/images/reset.png";
+    retry.src = "resources/images/restart.png";
     retry.addEventListener('load', function() {});
     
 
 setGeo(gl);
 
-initMouse();
+initSnail();
 createTextureLight();
 
 webglLessonsUI.setupSlider("#LightX", {value: 10, slide: updateLightx, min: 0, max: 450, step: 1});
@@ -128,7 +128,7 @@ webglLessonsUI.setupSlider("#LightZ", {value: 250, slide: updateLightz, min: 100
 
 function update(time){
 	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skip the frame if the call is too early
-		mouseDoStep(); 
+		snailDoStep(); 
 		nstep++; 
 		doneSomething=true;
 		window.requestAnimationFrame(update);
@@ -253,30 +253,33 @@ function drawScene( projectionMatrix, camera, textureMatrix, lightWorldMatrix, p
         });
     }
 
-    drawMouse(programInfo)
-    drawRotella(programInfo)
-    drawSchermo(programInfo)
-    drawVirus(programInfo,time)
-    drawVirus2(programInfo,time)
-    drawVirus3(programInfo,time)
-    drawVirus4(programInfo,time)
-    if (cartella1==0){
-        drawFolder(programInfo,time)
-    }
-    if (cartella2==0){
-        drawFolder2(programInfo,time)
-    }
-    if (cartella3==0){
-    drawFolder3(programInfo,time)}
+    drawSnail(programInfo)
+    drawParete(programInfo)
+    drawFlower(programInfo)
+    drawFlower2(programInfo)
+    drawFlower3(programInfo)
+    drawToxic(programInfo,time)
+    drawToxic2(programInfo,time)
+    drawToxic3(programInfo,time)
+    drawToxic4(programInfo,time)
     
     
-    if(numcartella==3){
-        if (pacco==false){
-            drawPacco(programInfo,time)
+    if (lattuce1==0){
+        drawLattuce(programInfo,time)
+    }
+    if (lattuce2==0){
+        drawLattuce2(programInfo,time)
+    }
+    if (lattuce3==0){
+    drawLattuce3(programInfo,time)}
+    
+    
+    if(numlat==3){
+        if (ant==false){
+            drawAnt(programInfo,time)
         }
     
-    drawFoto2(programInfo,time)}
-    //drawCube(programInfo,time)
+    drawFoto(programInfo,time)}
     drawFloor(programInfo)    
 }     
 
@@ -287,66 +290,97 @@ function drawTextInfo(){
     ctx.drawImage(freccie, 540, 330);  
     //ctx.drawImage(button1, 300, 450);
 	//ctx.drawImage(button3, 440, 450);  
-    ctx.drawImage(image_menu, 871.5, 17);
+    ctx.drawImage(image_menu, 860.5, 0);
     } 
     else{ctx.drawImage(image_menu, 871.5, 1);}
 	//testo
-	ctx.font = '14pt Calibri';
+
+	ctx.font = 'bold 14pt serif';
 	ctx.fillStyle = 'blue';
-	ctx.fillText("Prova a raccogliere tutte", 880, 50);
-	ctx.fillText("le cartelle ", 880, 70);
-    ctx.font = '14pt Calibri';
-	ctx.fillStyle = 'red';
-    numcartella=cartella1+cartella2+cartella3;
-    if ((numcartella)==0){
-        ctx.fillText("Cartella da raccogliere 3", 880, 100);}
-    else if ((numcartella)==1){
-            ctx.fillText("Cartella da raccogliere 2", 880, 100);}
-    else if ((numcartella)==2){
-                ctx.fillText("Cartella da raccogliere 1", 880, 100);}
-    else if ((numcartella)==3){
+	ctx.fillText("RACCOGLI LA LATTUGA", 880, 30);
+	ctx.fillText("PER IL TUO AMICO ", 880, 50);
+    ctx.fillText("PRIMA CHE ARRIVI ", 880, 70);
+    ctx.fillText("IL PROPRIETARIO", 880,   90);
+    ctx.font = '14pt calibri';
+	ctx.fillStyle = 'brown';
+    numlat=lattuce1+lattuce2+lattuce3;
+    if ((numlat)==0){
+        ctx.fillText("Numero di lattughe", 880, 110);
+        ctx.fillText("raccogliere: ", 880, 130);
+        ctx.font ='bold 14pt serif';
+        ctx.fillStyle = 'black';
+        ctx.fillText("3", 980, 130);}
+    else if ((numlat)==1){
+        ctx.fillText("Numero di lattughe", 880, 110);
+        ctx.fillText("raccogliere: ", 880, 130);
+        ctx.font ='bold 14pt serif';
+        ctx.fillStyle = 'black';
+        ctx.fillText("2", 980, 130);}
+    else if ((numlat)==2){
+        ctx.fillText("Numero di lattughe", 880, 110);
+        ctx.fillText("raccogliere: ", 880, 130);
+        ctx.font ='bold 14pt serif';
+        ctx.fillStyle = 'black';
+        ctx.fillText("1", 980, 130);}
+    else if ((numlat)==3){
         ctx.fillStyle = 'green';
-        ctx.fillText("          Complimenti!!!!!", 880, 100);
-        ctx.fillText("    Hai raccolto tutte le cartelle", 880, 120);
-        ctx.font = '14pt Calibri'; 
-        ctx.fillStyle = 'red';
-        ctx.fillText("      Hai fatto infuriare il boss!", 880, 190);
-        ctx.fillText("Cosa nasconde alle sue spalle?", 880, 210);
+        ctx.fillText("          Complimenti!!!!!", 880, 110);
+        ctx.fillText("    Hai raccolto la lattuga", 880, 130);
+        
     }
         
-    if (pacco==true){
+    if(ant==true){
+        ctx.font = 'bold 14pt serif';
         ctx.fillStyle = 'green';
-        ctx.fillText("    Grazie per aver recuperato", 880, 230);
-        ctx.fillText("    tutti i preziosi documenti!!", 880, 250);
+        ctx.fillText("          BRAVO!!!!!", 880, 200);
+        ctx.fillText("    Hai salvato il tuo amico !!", 880, 220);
     }
 
-	ctx.font = '12pt Calibri';
-	ctx.fillStyle = 'purple';
-	ctx.fillText("Attenzione evita i virus rotanti per ", 880, 140);
-	ctx.fillText("non rimetterci i circuiti", 880, 160);
-	ctx.font = '10pt Calibri';
-	ctx.fillStyle = 'black';
-	ctx.fillText("----------------------------------------------------------", 871, 270);
-	ctx.font = '16pt Calibri';
+	ctx.font = 'bold 18pt SERIF';
 	ctx.fillStyle = 'red';
-	ctx.fillText("	             CONTROLLI 		", 870, 290);
-	ctx.font = '13pt Calibri';
+    ctx.fillText("ATTENZIONE", 880, 160);
+    ctx.font = '14pt Calibri';
+	ctx.fillStyle = 'red';
+	ctx.fillText("evita le sostanze tossiche ", 880, 180);
+    ctx.font = '10pt Calibri';
 	ctx.fillStyle = 'black';
-    ctx.fillText("          Controllo movimento", 880, 310);
+	ctx.fillText("----------------------------------------------------------", 871, 240);
+    ctx.font = 'bold 13pt Calibri';
+	ctx.fillStyle = 'black';
+    ctx.fillText("          Controllo movimento", 880,250);
     ctx.font = '12pt Calibri';
-	ctx.fillText("          W avanti            A sinistra", 880, 330); 
-	ctx.fillText("          S indietro          D destra", 880, 350); 
+    ctx.fillText("UTILIZZA LA COMBINAZIONE ", 880,270);
+    ctx.fillText("DI TASTI WASD, PER MUOVERTI", 880, 290);
+    //ctx.fillText("", 880, 310);
+    //ctx.fillText("          PER MUOVERTI", 880, 310);
+    ctx.font = "bold 12pt Calibri";
+    ctx.fillText("W", 880, 310);
+    ctx.font = "12pt Calibri";
+    ctx.fillText("     avanti", 880,310);
+    ctx.font = "bold 12pt Calibri";
+    ctx.fillText("A", 970, 310);
+    ctx.font = "12pt Calibri";
+    ctx.fillText("     sinistra", 970,310);
+    ctx.font = "bold 12pt Calibri";
+    ctx.fillText("S", 880, 330);
+    ctx.font = "12pt Calibri";
+    ctx.fillText("     indietro", 880,330);
+    ctx.font = "bold 12pt Calibri";
+    ctx.fillText("D", 970, 330);
+    ctx.font = "12pt Calibri";
+    ctx.fillText("     destra", 970,330); 
+    ctx.font = 'bold 13pt Calibri';
+    ctx.fillText("Controllo movimento camera", 880, 370);
     ctx.font = '13pt Calibri';
-    ctx.fillText("Controllo movimento camera", 880, 380);
-	ctx.fillText("con le freccie direzionali ⇑⇓⇒⇐", 880, 400); 
-    ctx.fillText("o con il movimento del mouse", 880, 420);
+	ctx.fillText("con le freccie direzionali ⇑⇓⇒⇐", 880, 390); 
+    ctx.fillText("o con il movimento del mouse", 880, 410);
 	ctx.font = '13pt Calibri';
-	ctx.fillText("Puoi avvicinare e allontare la", 880, 440); 
-    ctx.fillText("camera con la rotella del mouse", 880, 460); 
+	ctx.fillText("Puoi avvicinare e allontare la", 880, 430); 
+    ctx.fillText("camera con la rotella del mouse", 880, 450); 
 	
    if(morte==1){  
         ctx.drawImage(matrix,0,0,text.clientWidth,text.clientHeight);
-        ctx.drawImage(retry,480, 175);
+        ctx.drawImage(retry,250, 30);
     }
 
 }
@@ -355,137 +389,163 @@ function drawTextInfo(){
 // -----------------------------------------------------------
 //FUNCTION TO DRAW THE OBJECTS ON THE SCENE
 // -----------------------------------------------------------
-function drawMouse(ProgramInfo){
+function drawSnail(ProgramInfo){
     let u_model4 = m4.scale(m4.translation(posX, posY, posZ), 3, 3, 3)
     u_model4 = m4.yRotate(u_model4, degToRad(facing))
    // u_model4 = m4.yRotate(u_model4, degToRad(180));
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_mouse)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_snail)
     webglUtils.setUniforms(ProgramInfo, {
        // u_colorMult: [0.5, 0.5, 1, 1],
         u_world: u_model4,
-        u_texture: texture_mouse,
+        u_texture: texture_snail,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_mouse)
+    webglUtils.drawBufferInfo(gl, bufferInfo_snail)
     }
 
-function drawRotella(ProgramInfo){
-    let u_model_rotella = m4.scale(m4.translation(posX, posY, posZ+0.01), 3, 3, 3)
-    u_model_rotella = m4.yRotate(u_model_rotella, degToRad(facing))
-    // u_model_rotella = m4.yRotate(u_model_rotella, degToRad(180));
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_rotella)
-    webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
-        u_world: u_model_rotella,
-        u_texture: texture_rotella,
-    })
-    webglUtils.drawBufferInfo(gl, bufferInfo_rotella)
-}
-
-
-function drawVirus(ProgramInfo,time){
+function drawToxic(ProgramInfo,time){
     let u_model = m4.identity()
     
 //  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(-25, 5.5, -15), 5.5,5.5,5.5)
+    u_model = m4.scale(m4.translation(-20, 5.5, -15), 5.5,5.5,5.5)
     u_model = m4.yRotate(u_model, time)
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_toxic)
     webglUtils.setUniforms(ProgramInfo, {
        
         u_world: u_model,
-        u_texture: texture_sphere,
+        u_texture: texture_toxic,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
+    webglUtils.drawBufferInfo(gl, bufferInfo_toxic)
 }
 
-
-function drawVirus2(ProgramInfo,time){
+function drawToxic2(ProgramInfo,time){
     let u_model = m4.identity()
-//  u_model = m4.yRotate(u_model, time)
-//  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(35, 1, 20), 5,5,5)
-    u_model = m4.yRotate(u_model, time)
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_virus)
-    webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
-        u_world: u_model,
-        u_texture: texture_virus
-    })
-    webglUtils.drawBufferInfo(gl, bufferInfo_virus)
-}
-
-
-function drawVirus3(ProgramInfo,time){
-    let u_model = m4.identity()
-//  u_model = m4.yRotate(u_model, time)
-//  u_model = m4.xRotate(u_model, 123)
-    u_model = m4.scale(m4.translation(12, 1,-10), 5,5,5)
-    
-    u_model = m4.yRotate(u_model, time)
-    
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_virus)
-    webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
-        u_world: u_model,
-        u_texture: texture_virus_purple
-    })
-    webglUtils.drawBufferInfo(gl, bufferInfo_virus)
-}
-
-
-function drawVirus4(ProgramInfo,time){
-    
-
-let u_model = m4.identity()
     
 //  u_model = m4.xRotate(u_model, 123)
     u_model = m4.scale(m4.translation(10, 5.5,30), 5.5,5.5,5.5)
     u_model = m4.yRotate(u_model, time)
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_sphere)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_toxic)
     webglUtils.setUniforms(ProgramInfo, {
        
         u_world: u_model,
-        u_texture: texture_sphere,
+        u_texture: texture_toxic,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_sphere)
+    webglUtils.drawBufferInfo(gl, bufferInfo_toxic)
 }
 
-//secondo cubo??
-function drawFolder(ProgramInfo,time){
-    let u_modelfolder = m4.scale(m4.translation(6,0,-35), 1.3, 1.3, 1.3)
-    u_modelfolder = m4.yRotate(u_modelfolder, time);
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_folder)
+function drawToxic3(ProgramInfo,time){
+    let u_model = m4.identity()
+    
+//  u_model = m4.xRotate(u_model, 123)
+    u_model = m4.scale(m4.translation(-15, 5.5, 9), 5.5,5.5,5.5)
+    u_model = m4.yRotate(u_model, time)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_toxic)
+    webglUtils.setUniforms(ProgramInfo, {
+       
+        u_world: u_model,
+        u_texture: texture_toxic,
+    })
+    webglUtils.drawBufferInfo(gl, bufferInfo_toxic)
+}
+
+function drawToxic4(ProgramInfo,time){
+    let u_model = m4.identity()
+//  u_model = m4.yRotate(u_model, time)
+//  u_model = m4.xRotate(u_model, 123)
+    u_model = m4.scale(m4.translation(12, 5.5,-10), 5,5,5)
+    
+    u_model = m4.yRotate(u_model, time)
+    
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_toxic)
+    webglUtils.setUniforms(ProgramInfo, {
+        //u_colorMult: [0.5, 0.5, 1, 1],
+        u_world: u_model,
+        u_texture: texture_toxic
+    })
+    webglUtils.drawBufferInfo(gl, bufferInfo_toxic)
+}
+
+
+function drawFlower(ProgramInfo){
+    let u_modelflower = m4.identity()
+    u_modelflower = m4.scale(m4.translation(12, -17, -20), 5, 5, 5)
+    //u_modelflower = m4.yRotate(u_modelflower, degToRad(facing))
+   // u_model4 = m4.yRotate(u_model4, degToRad(180));
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_flower)
+    webglUtils.setUniforms(ProgramInfo, {
+        //u_colorMult: [0.5, 0.5, 1, 1],
+        u_world: u_modelflower,
+        u_texture: texture_flower,
+    })
+    webglUtils.drawBufferInfo(gl, bufferInfo_flower)
+}
+
+
+function drawFlower2(ProgramInfo){
+    let u_modelflower = m4.scale(m4.translation(40, -17, 40), 5, 5, 5)
+    //u_modelflower = m4.yRotate(u_modelflower, degToRad(facing))
+    // u_model4 = m4.yRotate(u_model4, degToRad(180));
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_flower)
     webglUtils.setUniforms(ProgramInfo, {
         u_colorMult: [0.5, 0.5, 1, 1],
-        u_world: u_modelfolder,
-        u_texture: texture_folder,
+        u_world: u_modelflower,
+        u_texture: texture_flower,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_folder)
+    webglUtils.drawBufferInfo(gl, bufferInfo_flower)
+    }
+    
+
+function drawFlower3(ProgramInfo){
+    let u_modelflower = m4.scale(m4.translation(-40, -17, 40), 5, 5, 5)
+    //u_modelflower = m4.yRotate(u_modelflower, degToRad(facing))
+    // u_model4 = m4.yRotate(u_model4, degToRad(180));
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_flower)
+    webglUtils.setUniforms(ProgramInfo, {
+        u_colorMult: [0.5, 0.5, 1, 1],
+        u_world: u_modelflower,
+        u_texture: texture_flower,
+    })
+    webglUtils.drawBufferInfo(gl, bufferInfo_flower)
+    }
+        
+
+
+//Funzione per disegnare la pianta
+function drawLattuce(ProgramInfo,time){
+    let u_modellattuce = m4.scale(m4.translation(6,0,-35), 1.3, 1.3, 1.3)
+    u_modellattuce = m4.yRotate(u_modellattuce, time);
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_lattuce)
+    webglUtils.setUniforms(ProgramInfo, {
+        //u_colorMult: [0.5, 0.5, 1, 1],
+        u_world: u_modellattuce,
+        u_texture: texture_lattuce,
+    })
+    webglUtils.drawBufferInfo(gl, bufferInfo_lattuce)
 }
 
     
-function drawFolder2(ProgramInfo,time){
-    let u_modelfolder = m4.scale(m4.translation(32,0,-8), 1.3, 1.3, 1.3)
-    u_modelfolder = m4.yRotate(u_modelfolder, time);
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_folder)
+function drawLattuce2(ProgramInfo,time){
+    let u_modellattuce = m4.scale(m4.translation(32,0,-8), 1.3, 1.3, 1.3)
+    u_modellattuce = m4.yRotate(u_modellattuce, time);
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_lattuce)
     webglUtils.setUniforms(ProgramInfo, {
-        u_colorMult: [0.5, 0.5, 1, 1],
-        u_world: u_modelfolder,
-        u_texture: texture_folder,
+        //u_colorMult: [0.5, 0.5, 1, 1],
+        u_world: u_modellattuce,
+        u_texture: texture_lattuce,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_folder)
+    webglUtils.drawBufferInfo(gl, bufferInfo_lattuce)
 }
 
 
-function drawFolder3(ProgramInfo,time){
-    let u_modelfolder = m4.scale(m4.translation(-15,0,35), 1.3, 1.3, 1.3)
-    u_modelfolder = m4.yRotate(u_modelfolder, time);
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_folder)
+function drawLattuce3(ProgramInfo,time){
+    let u_modellattuce = m4.scale(m4.translation(-15,0,35), 1.3, 1.3, 1.3)
+    u_modellattuce = m4.yRotate(u_modellattuce, time);
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_lattuce)
     webglUtils.setUniforms(ProgramInfo, {
         //u_colorMult: [0.5, 0.5, 1, 1],
-        u_world: u_modelfolder,
-        u_texture: texture_folder,
+        u_world: u_modellattuce,
+        u_texture: texture_lattuce,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_folder)
+    webglUtils.drawBufferInfo(gl, bufferInfo_lattuce)
 }
 
 function drawCube(ProgramInfo){
@@ -497,7 +557,7 @@ function drawCube(ProgramInfo){
         u_world: u_modelcube,
         
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_folder)
+    webglUtils.drawBufferInfo(gl, bufferInfo_lattuce)
 }
 
 function drawFloor(ProgramInfo){
@@ -511,21 +571,21 @@ function drawFloor(ProgramInfo){
     }
     
 
-function drawPacco(ProgramInfo){
-    let u_modelfoto=m4.identity()
-    u_modelfoto=m4.scale(m4.translation(0,2,-29),4,4,4)
-    u_modelfoto=m4.yRotate(u_modelfoto,degToRad(180))
+function drawAnt(ProgramInfo){
+    let u_modelant=m4.identity()
+    u_modelant=m4.scale(m4.translation(0,0,-29),4,4,4)
+    u_modelant=m4.yRotate(u_modelant,degToRad(180))
     //u_modelfoto = m4.zRotate(m4.identity(), 90)
-    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_foto)
+    webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_ant)
     webglUtils.setUniforms(ProgramInfo, {
-        u_world: u_modelfoto,
-        u_texture: texture_foto,
+        u_world: u_modelant,
+        u_texture: texture_ant,
     })
-    webglUtils.drawBufferInfo(gl, bufferInfo_foto)
+    webglUtils.drawBufferInfo(gl, bufferInfo_ant)
     }
         
 
-function drawSchermo(ProgramInfo){
+function drawParete(ProgramInfo){
     let u_modelfoto=m4.identity()
     u_modelfoto=m4.scale(m4.translation(0,45,-66),140,90,1)
     //u_modelfoto=m4.yRotate(u_modelfoto,degToRad(90))
@@ -533,12 +593,12 @@ function drawSchermo(ProgramInfo){
     webglUtils.setBuffersAndAttributes(gl, ProgramInfo, bufferInfo_foto)
     webglUtils.setUniforms(ProgramInfo, {
         u_world: u_modelfoto,
-        u_texture: texture_win,
+        u_texture: texture_par,
     })
     webglUtils.drawBufferInfo(gl, bufferInfo_foto)
     }
 
-function drawFoto2(ProgramInfo,time){
+function drawFoto(ProgramInfo,time){
     let u_modelfoto=m4.identity()
     u_modelfoto=m4.scale(m4.translation(0,5.5,-10),7,7,7)
     u_modelfoto=m4.zRotate(m4.xRotate(m4.yRotate(u_modelfoto,time),time),time)
